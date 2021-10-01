@@ -1,14 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <title>Buckley.ca</title>
-    <meta name="description" content="The Buckley.ca Homepage" />
-    <meta name="author" content="Sean Buckley" />
-    <link rel="stylesheet" href="css/style.css?v=1.0" />
-  </head>
-  <body>
-    <svg
+<script>
+	export let name;
+</script>
+
+<main>
+	<svg
       class="sblogo-svg center"
       xmlns="http://www.w3.org/2000/svg"
       version="1.1"
@@ -29,5 +24,26 @@
         d="M287.7 283.7c-27.9-12.2-104.6-46.9-104.6-46.9 -96.5-37.5-158.3-112-87.5-193.5 2.9-3.3 6.6-5.8 10.1-8.4 -43.6 24.2-71.3 61.9-71.3 104.8 0 34.3 14.1 65 50.2 94.3 12 9.7 32.1 21.9 48.9 31.6 15.8 9.1 49.8 24.8 60 29.1 63.8 26.9 122.3 52.5 122.3 100.9 0 40-44.1 70-102.2 70 -69.6 0-121.6-36.4-150.7-107.1H28.6l22 130h22.9c4.4-7.9 10.6-11.4 18.5-11.4 15.9 0 80.2 22.9 150.7 22.9 44.3 0 84.6-10.4 116.4-28.1 3.5-2.6 6.9-5.4 10.1-8.4C444.7 391.5 368.7 319.2 287.7 283.7z"
       />
     </svg>
-  </body>
-</html>
+</main>
+
+<style>
+	main {
+		text-align: center;
+		padding: 1em;
+		max-width: 240px;
+		margin: 0 auto;
+	}
+
+	h1 {
+		color: #ff3e00;
+		text-transform: uppercase;
+		font-size: 4em;
+		font-weight: 100;
+	}
+
+	@media (min-width: 640px) {
+		main {
+			max-width: none;
+		}
+	}
+</style>
