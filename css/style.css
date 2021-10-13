@@ -1,5 +1,6 @@
 html {
-  background: url(../img/background-1600.jpg) fixed no-repeat center center;
+  background: url(https://res.cloudinary.com/buckey-ca/image/upload/v1634141535/background-1600_ovnjor.jpg)
+    fixed no-repeat center center;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
