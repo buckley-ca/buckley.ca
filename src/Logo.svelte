@@ -28,6 +28,8 @@
     max-height: 800px;
     min-width: 40px;
     min-height: 40px;
+    -webkit-filter: drop-shadow( 0.4px 0.8px 0.8px rgba(0, 0, 0, .233));
+    filter: drop-shadow( 0.4px 0.8px 0.8px rgba(0, 0, 0, 0.233));
   }
   .sblogo-svg-s,
   .sblogo-svg-b {
