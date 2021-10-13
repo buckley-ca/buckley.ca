@@ -1,49 +1,53 @@
 <script>
-	export let name;
+  export let site_name;
+  export let tld;
+  import Logo from './Logo.svelte';
 </script>
 
-<main>
-	<svg
-      class="sblogo-svg center"
-      xmlns="http://www.w3.org/2000/svg"
-      version="1.1"
-      x="0"
-      y="0"
-      width="500"
-      height="500"
-      viewbox="0 0 500 500"
-      xml:space="preserve"
-      enable-background="new 0 0 500 500"
-    >
-      <path
-        class="sblogo-svg-s"
-        d="M471.4 354.9c0-36.6-15-69.5-53.5-100.8 -105.2-85.5-261.1-98.5-261.1-168.7 0-29.8 39.5-52.7 92.1-52.7 72.3 0 132.5 40.5 153.1 102.3h37.6L421.7 11.4h-19.7c-8.5 6.9-14.1 8.4-20.7 8.4 -13.3 0-64.2-17.6-130.6-19.7C203.1 1.8 128.9 11.4 110.3 62.8c-40.4 111.6 119.6 148.5 204 190.3 95.9 47.5 172.4 127.9 91.9 204.8 -3.4 3.2-7 6.2-10.8 9C441.9 441.1 471.4 400.8 471.4 354.9z"
-      />
-      <path
-        class="sblogo-svg-b"
-        d="M287.7 283.7c-27.9-12.2-104.6-46.9-104.6-46.9 -96.5-37.5-158.3-112-87.5-193.5 2.9-3.3 6.6-5.8 10.1-8.4 -43.6 24.2-71.3 61.9-71.3 104.8 0 34.3 14.1 65 50.2 94.3 12 9.7 32.1 21.9 48.9 31.6 15.8 9.1 49.8 24.8 60 29.1 63.8 26.9 122.3 52.5 122.3 100.9 0 40-44.1 70-102.2 70 -69.6 0-121.6-36.4-150.7-107.1H28.6l22 130h22.9c4.4-7.9 10.6-11.4 18.5-11.4 15.9 0 80.2 22.9 150.7 22.9 44.3 0 84.6-10.4 116.4-28.1 3.5-2.6 6.9-5.4 10.1-8.4C444.7 391.5 368.7 319.2 287.7 283.7z"
-      />
-    </svg>
+<main class="background center">
+  <div class="container">
+    <Logo />
+    <h1>{site_name}<span>.{tld}</span></h1>
+  </div>
 </main>
 
 <style>
-	main {
-		text-align: center;
-		padding: 1em;
-		max-width: 240px;
-		margin: 0 auto;
-	}
+  .center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 
-	h1 {
-		color: #ff3e00;
-		text-transform: uppercase;
-		font-size: 4em;
-		font-weight: 100;
-	}
+  .container {
+    text-align: center;
+  }
 
-	@media (min-width: 640px) {
-		main {
-			max-width: none;
-		}
-	}
+  .background {
+    background: url(../img/background-1600.jpg) fixed no-repeat center center;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    height: 100%;
+    /* filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../img/bg-small.jpg', sizingMethod='scale'); */
+    /* -ms-filter: "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../img/bg-small.jpg', sizingMethod='scale')"; */
+  }
+
+  h1 {
+    color: #f2f2f2;
+    text-transform: uppercase;
+    font-size: 4rem;
+    font-weight: 600;
+    position: relative;
+    margin:0;
+  }
+
+  h1 span {
+    font-size: 2rem;
+  }
+  @media (min-width: 640px) {
+    main {
+      max-width: none;
+    }
+  }
 </style>
