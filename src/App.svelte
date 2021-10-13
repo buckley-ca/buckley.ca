@@ -23,7 +23,8 @@
   }
 
   .background {
-    background: url(https://res.cloudinary.com/buckey-ca/image/upload/v1634141535/background-1600_ovnjor.jpg) fixed no-repeat center center;
+    background: url(https://res.cloudinary.com/buckey-ca/image/upload/v1634141535/background-1600_ovnjor.jpg)
+      fixed no-repeat center center;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -39,12 +40,14 @@
     font-size: 4rem;
     font-weight: 600;
     position: relative;
-    margin:0;
+    margin: 0;
     text-shadow: 0.4px 0.8px 0.8px hsl(0deg 0% 0% / 0.15);
   }
-
+ 
   h1 span {
-    font-size: 2rem;
+    font-size: 1.5rem;
+    position: relative;
+    right: 0.5rem;
   }
   @media (min-width: 640px) {
     main {
