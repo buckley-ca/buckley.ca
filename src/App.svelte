@@ -45,7 +45,7 @@
     margin: 0;
     text-shadow: 0.4px 0.8px 0.8px hsl(0deg 0% 0% / 0.15);
   }
-
+ 
   h1 span {
     font-size: 1.5rem;
     position: relative;
