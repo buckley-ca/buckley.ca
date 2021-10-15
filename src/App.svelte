@@ -2,6 +2,7 @@
   export let site_name;
   export let tld;
   import Logo from './Logo.svelte';
+  import Formbutton from './Formbutton.svelte';
 </script>
 
 <main class="background center">
@@ -9,6 +10,7 @@
     <Logo />
     <h1>{site_name}<span>.{tld}</span></h1>
   </div>
+  <Formbutton />
 </main>
 
 <style>
