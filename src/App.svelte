@@ -3,13 +3,20 @@
   export let tld;
   import Logo from './Logo.svelte';
   import Formbutton from './Formbutton.svelte';
+  import { fade } from 'svelte/transition';
+  import { onMount } from 'svelte';
+
+  let ready = false;
+  onMount(() => (ready = true));
 </script>
 
 <main class="background center">
-  <div class="container">
-    <Logo />
-    <h1>{site_name}<span>.{tld}</span></h1>
-  </div>
+  {#if ready}
+    <div class="container" transition:fade={{ delay: 20, duration: 1500 }}>
+      <Logo />
+      <h1>{site_name}<span>.{tld}</span></h1>
+    </div>
+  {/if}
   <Formbutton />
 </main>
 
@@ -45,7 +52,7 @@
     margin: 0;
     text-shadow: 0.4px 0.8px 0.8px hsl(0deg 0% 0% / 0.15);
   }
- 
+
   h1 span {
     font-size: 1.5rem;
     position: relative;
