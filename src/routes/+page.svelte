@@ -3,13 +3,15 @@
 	import { fade } from 'svelte/transition';
 	import { onMount } from 'svelte';
 
+	export const prerender = true;
+
 	let ready = false;
 	onMount(() => (ready = true));
 </script>
 
 <svelte:head>
 	<title>Buckley.ca - Home</title>
-	<meta name="description" content="The Buckley.ca Homepage" />
+	<meta name="description" content="Buckley.ca - Home" />
 </svelte:head>
 
 <section class="background center">
