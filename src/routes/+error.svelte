@@ -1,4 +1,5 @@
 <script>
+// @ts-nocheck
 	export const prerender = true;
 	import { page } from '$app/stores';
 </script>
