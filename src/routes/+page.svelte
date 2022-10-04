@@ -9,7 +9,7 @@
 
 <svelte:head>
 	<title>Buckley.ca - Home</title>
-	<meta name="description" content="The Buckley.ca Homepage" />
+	<meta name="description" content="Buckley.ca - Home" />
 </svelte:head>
 
 <section class="background center">
