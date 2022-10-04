@@ -1,10 +1,9 @@
 <script>
-// @ts-nocheck
+	// @ts-nocheck
 	export const prerender = true;
 	import { page } from '$app/stores';
 </script>
 
-// @ts-nocheck
 <svelte:head>
 	<title>Buckley.ca - Error</title>
 	<meta name="description" content="Buckley.ca - Error" />
