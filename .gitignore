@@ -1,9 +1,10 @@
-/node_modules/
-/public/build/
-
 .DS_Store
-
-# Old .gitignore
-.sass-cache/
+node_modules
+/build
+/.svelte-kit
+/package
+.env
+.env.*
+!.env.example
 *.css.map
 .vscode/
