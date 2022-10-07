@@ -14,7 +14,7 @@
 	<meta name="description" content="Buckley.ca - Home" />
 </svelte:head>
 
-<section class="background center">
+<section class="center">
 	{#if ready}
 		<div class="logo-container" in:fade={{ delay: 20, duration: 1500 }}>
 			<Logo />
@@ -24,17 +24,6 @@
 </section>
 
 <style>
-	.background {
-		background: url(https://res.cloudinary.com/buckey-ca/image/upload/v1634141535/background-1600_ovnjor.jpg)
-			fixed no-repeat center center;
-		-webkit-background-size: cover;
-		-moz-background-size: cover;
-		-o-background-size: cover;
-		background-size: cover;
-		/* filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../img/bg-small.jpg', sizingMethod='scale'); */
-		/* -ms-filter: "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../img/bg-small.jpg', sizingMethod='scale')"; */
-	}
-
 	.center {
 		display: flex;
 		flex-direction: column;

@@ -7,7 +7,7 @@
 	onMount(() => (ready = true));
 </script>
 
-<section class="center background">
+<section class="center">
 	{#if ready}
 		<div class="contact" in:fade={{ delay: 20, duration: 500 }}>
 			<h1>Contact</h1>
@@ -34,15 +34,5 @@
 		-moz-border-radius: 10px;
 		-webkit-border-radius: 10px;
 		border-radius: 10px;
-	}
-	.background {
-		background: url(https://res.cloudinary.com/buckey-ca/image/upload/v1634141535/background-1600_ovnjor.jpg)
-			fixed no-repeat center center;
-		-webkit-background-size: cover;
-		-moz-background-size: cover;
-		-o-background-size: cover;
-		background-size: cover;
-		/* filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../img/bg-small.jpg', sizingMethod='scale'); */
-		/* -ms-filter: "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../img/bg-small.jpg', sizingMethod='scale')"; */
 	}
 </style>
