@@ -33,13 +33,14 @@
 		background-size: cover;
 		/* filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../img/bg-small.jpg', sizingMethod='scale'); */
 		/* -ms-filter: "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../img/bg-small.jpg', sizingMethod='scale')"; */
-		height: 100vh;
 	}
 
 	.center {
 		display: flex;
-		align-items: center;
+		flex-direction: column;
 		justify-content: center;
+		align-items: center;
+		height: 100vh;
 	}
 
 	.logo-container {
@@ -61,6 +62,7 @@
 		position: relative;
 		right: 0.5rem;
 	}
+
 	@media (min-width: 640px) {
 		section {
 			max-width: none;
