@@ -10,7 +10,7 @@
 <Snow />
 <section class="center">
 	{#if ready}
-		<div class="contact" in:fade={{ delay: 20, duration: 500 }}>
+		<div class="contact" in:fade={{ delay: 10, duration: 500 }}>
 			<h1>Contact</h1>
 			<ContactForm />
 		</div>
