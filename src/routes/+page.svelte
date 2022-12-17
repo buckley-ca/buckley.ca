@@ -1,5 +1,6 @@
 <script>
-	import Logo from '../lib/Logo.svelte';
+	import Logo from '$lib/Logo.svelte';
+	import Snow from '$lib/Snow.svelte';
 	import { fade } from 'svelte/transition';
 	import { onMount } from 'svelte';
 
@@ -14,9 +15,10 @@
 	<meta name="description" content="Buckley.ca - Home" />
 </svelte:head>
 
+<Snow />
 <section class="center">
 	{#if ready}
-		<div class="logo-container" in:fade={{ delay: 20, duration: 1500 }}>
+		<div class="logo-container" in:fade={{ delay: 10, duration: 1500 }}>
 			<Logo />
 			<h1>buckley<span>.ca</span></h1>
 		</div>
