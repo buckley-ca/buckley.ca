@@ -16,6 +16,9 @@
 </header>
 
 <style>
+	header {
+		height: 5vh;
+	}
 	nav {
 		background-color: rgba(255, 255, 255, 0.5);
 		padding: 0.15rem;
