@@ -21,7 +21,7 @@
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
-		height: 100vh;
+		height: 95vh;
 	}
 	h1 {
 		font-size: 3rem;
