@@ -4,25 +4,28 @@
 
 <header>
 	<nav>
-		<li class:active={$page.url.pathname === '/'}>
-			<a href="/">Home</a>
-		</li>
-		<li class:active={$page.url.pathname === '/contact'}>
-			<a href="/contact">Contact</a>
-		</li>
+		<ul>
+			<li class:active={$page.url.pathname === '/'}>
+				<a href="/">Home</a>
+			</li>
+			<li class:active={$page.url.pathname === '/contact'}>
+				<a href="/contact">Contact</a>
+			</li>
+		</ul>
 	</nav>
 </header>
 
 <style>
 	nav {
+		background-color: rgba(255, 255, 255, 0.5);
+		padding: 0.15rem;
+	}
+	ul {
 		display: flex;
 		flex-direction: row;
 		flex-wrap: nowrap;
 		justify-content: left;
 		align-items: baseline;
-
-		background-color: rgba(255, 255, 255, 0.5);
-		padding: 1rem;
 	}
 	li {
 		list-style-type: none;
