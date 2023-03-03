@@ -3,8 +3,6 @@
 	import { fade } from 'svelte/transition';
 	import { onMount } from 'svelte';
 
-	export const prerender = true;
-
 	let ready = false;
 	onMount(() => (ready = true));
 </script>
