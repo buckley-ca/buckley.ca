@@ -20,6 +20,6 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           projectName: buckley-ca
-          directory: .svelte-kit/cloudflare
+          directory: .svelte-kit
           # Optional: Enable this if you want to have GitHub Deployments triggered
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
