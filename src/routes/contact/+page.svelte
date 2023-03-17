@@ -28,7 +28,7 @@
 		margin: 0 0 1rem 0;
 	}
 	.contact {
-		background-color: rgba(255, 255, 255, 0.5);
+		background-color: rgba(255, 255, 255, 0.75);
 		padding: 1rem;
 		-moz-border-radius: 10px;
 		-webkit-border-radius: 10px;
