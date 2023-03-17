@@ -10,7 +10,7 @@
 
 <section>
 	<h1>Error - {$page.status}: {$page.error.message}</h1>
-	<p>Uh oh, you've encoutered an error. Please go back <a href="/">home</a>.</p>
+	<p>Uh oh, you've encountered an error. Please go back <a href="/">home</a>.</p>
 </section>
 
 <style>
