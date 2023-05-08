@@ -16,7 +16,7 @@
 		"@playwright/test": "^1.33.0",
 		"@sveltejs/adapter-auto": "next",
 		"@sveltejs/adapter-cloudflare": "^2.2.1",
-		"@sveltejs/kit": "1.15.9",
+		"@sveltejs/kit": "1.16.2",
 		"eslint": "^8.39.0",
 		"eslint-config-prettier": "^8.8.0",
 		"eslint-plugin-svelte3": "^4.0.0",
