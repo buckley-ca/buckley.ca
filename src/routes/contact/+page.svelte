@@ -2,7 +2,7 @@
 	import ContactForm from '$lib/ContactForm.svelte';
 	import { fade } from 'svelte/transition';
 	import { onMount } from 'svelte';
-	let ready = false;
+	let ready = $state(false);
 	onMount(() => (ready = true));
 </script>
 

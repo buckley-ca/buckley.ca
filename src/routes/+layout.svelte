@@ -1,11 +1,13 @@
 <script>
 	import '../app.css';
 	import Header from './Header.svelte';
+	/** @type {{children?: import('svelte').Snippet}} */
+	let { children } = $props();
 </script>
 
 <main class="background">
 	<Header />
-	<slot />
+	{@render children?.()}
 </main>
 
 <style>
