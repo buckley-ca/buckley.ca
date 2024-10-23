@@ -5,7 +5,7 @@
 	</label>
 	<label>
 		Your message:
-		<textarea name="message" />
+		<textarea name="message"></textarea>
 	</label>
 	<input type="text" name="_gotcha" style="display:none" />
 	<button type="submit">Send</button>
