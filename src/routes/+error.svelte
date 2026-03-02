@@ -1,5 +1,4 @@
 <script>
-	// @ts-nocheck
 	import { page } from '$app/stores';
 </script>
 
@@ -10,7 +9,7 @@
 
 <section class="center">
 	<div class="logo-container">
-		<h1>{$page.status} | {$page.error.message}</h1>
+		<h1>{$page.status} | {$page.error?.message ?? 'Unknown error'}</h1>
 		<p>Uh oh, you've encountered an error. Please go back <a href="/">home</a>.</p>
 	</div>
 </section>
