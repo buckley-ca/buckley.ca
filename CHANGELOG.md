@@ -51,3 +51,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `npm run check` - Type checking
 - `npm run lint` - Linting
 - `npm run format` - Code formatting
+
+---
+
+## Code Review Findings (2026-03-02)
+
+### High Priority
+| Issue | File | Fix |
+|-------|------|-----|
+| Broken test | tests/test.js | ✅ Fixed |
+| @ts-nocheck unsafe | src/routes/+error.svelte | ✅ Fixed |
+| Missing form validation | src/lib/ContactForm.svelte | ✅ Fixed |
+
+### Medium Priority
+| Issue | File | Recommendation |
+|-------|------|----------------|
+| Missing OG/Twitter meta | +layout.svelte, +page.svelte | Add og:*, twitter:card tags |
+| Animation timing off | +page.svelte, contact/+page.svelte | Change `delay: 5` → `delay: 5000` |
+| External background | +layout.svelte | Host locally in static/ |
+| CLS on header | Header.svelte | Use px instead of vh for height |
+| Missing skip nav | Header.svelte | Add skip link for a11y |
+
+### Low Priority
+- Add sitemap.xml, robots.txt
+- Add apple-touch-icon, manifest.json for PWA
+- Consolidate duplicate background-size CSS in +layout.svelte
+- Consider moving Formspree URL to env var
