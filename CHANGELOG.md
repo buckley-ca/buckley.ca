@@ -9,10 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- **tests/test.js**: Fixed broken test that expected "Welcome to SvelteKit" h1 text - now correctly expects "buckley" text
-- **src/routes/+error.svelte**: Removed dangerous `@ts-nocheck` comment that disabled type checking
-- **src/lib/ContactForm.svelte**: Added `required` attributes to email and message fields for form validation
-- **src/lib/ContactForm.svelte**: Added proper `for`/`id` associations between labels and form inputs for accessibility
+- **tests/test.js**: Fixed broken test - was expecting "Welcome to SvelteKit", now expects "buckley"
+- **src/routes/+error.svelte**: Removed `@ts-nocheck`, added null-safe access `$page.error?.message ?? 'Unknown error'`
+- **src/lib/ContactForm.svelte**: Added `required` attrs, `<label for>/<input id>` associations
+- **src/lib/Logo.svelte**: Fixed `viewbox` → `viewBox` (camelCase), added a11y svelte-ignore
 
 ---
 
