@@ -1,7 +1,7 @@
 <script>
 	import Logo from '$lib/Logo.svelte';
-	import { fade } from 'svelte/transition';
 	import { onMount } from 'svelte';
+	import { fade } from 'svelte/transition';
 
 	let ready = $state(false);
 	onMount(() => (ready = true));
@@ -14,7 +14,7 @@
 
 <section class="center">
 	{#if ready}
-		<div class="logo-container" in:fade={{ delay: 5, duration: 1500 }}>
+		<div class="logo-container" in:fade={{ delay: 100, duration: 1500 }}>
 			<Logo />
 			<h1>buckley<span>.ca</span></h1>
 		</div>

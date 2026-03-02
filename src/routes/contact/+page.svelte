@@ -1,14 +1,14 @@
 <script>
 	import ContactForm from '$lib/ContactForm.svelte';
-	import { fade } from 'svelte/transition';
 	import { onMount } from 'svelte';
+	import { fade } from 'svelte/transition';
 	let ready = $state(false);
 	onMount(() => (ready = true));
 </script>
 
 <section class="center">
 	{#if ready}
-		<div class="contact" in:fade={{ delay: 5, duration: 500 }}>
+		<div class="contact" in:fade={{ delay: 100, duration: 500 }}>
 			<h1>Contact</h1>
 			<ContactForm />
 		</div>
