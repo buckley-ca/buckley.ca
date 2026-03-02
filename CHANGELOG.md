@@ -73,7 +73,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | Missing skip nav | Header.svelte | Add skip link for a11y |
 
 ### Low Priority
-- Add sitemap.xml, robots.txt
-- Add apple-touch-icon, manifest.json for PWA
-- Consolidate duplicate background-size CSS in +layout.svelte
-- Consider moving Formspree URL to env var
+| Issue | File | Recommendation |
+|-------|------|----------------|
+| Missing sitemap, robots.txt | root | Add static/sitemap.xml, robots.txt |
+| Missing PWA icons | static | Add apple-touch-icon, manifest.json |
+| Duplicate CSS | +layout.svelte | Consolidate background-size rules |
+| Hardcoded Formspree URL | ContactForm.svelte | Move to env var
