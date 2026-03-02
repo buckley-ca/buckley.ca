@@ -67,7 +67,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | Issue | File | Recommendation |
 |-------|------|----------------|
 | Missing OG/Twitter meta | +layout.svelte, +page.svelte | Add og:*, twitter:card tags |
-| Animation timing off | +page.svelte, contact/+page.svelte | Change `delay: 5` → `delay: 5000` |
+| Animation timing off | +page.svelte, contact/+page.svelte | ✅ Fixed |
 | External background | +layout.svelte | Host locally in static/ |
 | CLS on header | Header.svelte | Use px instead of vh for height |
 | Missing skip nav | Header.svelte | Add skip link for a11y |
