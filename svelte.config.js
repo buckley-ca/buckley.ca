@@ -1,4 +1,5 @@
 import adapter from '@sveltejs/adapter-auto';
+// Using adaptor-auto due to deployments to both  Cloudflare and Vercel.
 
 export default {
 	kit: {
