@@ -19,12 +19,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## AI Developer Notes
 
 ### Project Structure
+
 - SvelteKit 5.x with Svelte 5 runes (`$state`, `$derived`, `$effect`)
 - Cloudflare Workers deployment via Wrangler
 - Pre-rendered static site (`prerender = true` in +layout.js)
 - ESLint + Prettier for code quality
 
 ### Key Files
+
 - `src/routes/+layout.svelte` - Main layout with background image
 - `src/routes/+page.svelte` - Homepage with logo
 - `src/routes/contact/+page.svelte` - Contact page with form
@@ -32,6 +34,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `src/lib/Logo.svelte` - SVG logo component
 
 ### Known Technical Debt
+
 - Animation delays use `delay: 5` which is 5ms (likely intended as 5000ms for seconds)
 - External background image URL should be moved to local/static assets
 - Missing SEO meta tags (Open Graph, Twitter Cards)
@@ -39,13 +42,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - adapter-auto config has potentially conflicting route exclusions
 
 ### Environment Variables Needed
+
 - None currently (Formspree URL is hardcoded)
 
 ### Testing
+
 - Playwright tests in `tests/test.js`
 - Run with `npm run test`
 
 ### Scripts
+
 - `npm run dev` - Development server
 - `npm run build` - Production build
 - `npm run check` - Type checking
@@ -57,25 +63,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Code Review Findings (2026-03-02)
 
 ### High Priority
-| Issue | File | Fix |
-|-------|------|-----|
-| Broken test | tests/test.js | ✅ Fixed |
-| @ts-nocheck unsafe | src/routes/+error.svelte | ✅ Fixed |
+
+| Issue                   | File                       | Fix      |
+| ----------------------- | -------------------------- | -------- |
+| Broken test             | tests/test.js              | ✅ Fixed |
+| @ts-nocheck unsafe      | src/routes/+error.svelte   | ✅ Fixed |
 | Missing form validation | src/lib/ContactForm.svelte | ✅ Fixed |
 
 ### Medium Priority
-| Issue | File | Recommendation |
-|-------|------|----------------|
-| Missing OG/Twitter meta | +layout.svelte, +page.svelte | Add og:*, twitter:card tags |
-| Animation timing off | +page.svelte, contact/+page.svelte | ✅ Fixed |
-| External background | +layout.svelte | Host locally in static/ |
-| CLS on header | Header.svelte | Use px instead of vh for height |
-| Missing skip nav | Header.svelte | Add skip link for a11y |
+
+| Issue                   | File                               | Recommendation                  |
+| ----------------------- | ---------------------------------- | ------------------------------- |
+| Missing OG/Twitter meta | +layout.svelte, +page.svelte       | Add og:\*, twitter:card tags    |
+| Animation timing off    | +page.svelte, contact/+page.svelte | ✅ Fixed                        |
+| External background     | +layout.svelte                     | Host locally in static/         |
+| CLS on header           | Header.svelte                      | Use px instead of vh for height |
+| Missing skip nav        | Header.svelte                      | Add skip link for a11y          |
 
 ### Low Priority
-| Issue | File | Recommendation |
-|-------|------|----------------|
-| Missing sitemap, robots.txt | root | Add static/sitemap.xml, robots.txt |
-| Missing PWA icons | static | Add apple-touch-icon, manifest.json |
-| Duplicate CSS | +layout.svelte | Consolidate background-size rules |
-| Hardcoded Formspree URL | ContactForm.svelte | Move to env var
+
+| Issue                       | File               | Recommendation                      |
+| --------------------------- | ------------------ | ----------------------------------- |
+| Missing sitemap, robots.txt | root               | Add static/sitemap.xml, robots.txt  |
+| Missing PWA icons           | static             | Add apple-touch-icon, manifest.json |
+| Duplicate CSS               | +layout.svelte     | Consolidate background-size rules   |
+| Hardcoded Formspree URL     | ContactForm.svelte | Move to env var                     |
