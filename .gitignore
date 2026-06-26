@@ -1,8 +1,12 @@
 .DS_Store
 node_modules
-/build
-/.svelte-kit
-/package
+# Astro build output and cache
+dist/
+.astro/
+# Playwright
+test-results/
+playwright-report/
+
 .env
 .env.*
 !.env.example

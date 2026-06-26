@@ -1,8 +1,9 @@
 .DS_Store
 node_modules
-/build
-/.svelte-kit
-/package
+dist/
+.astro/
+test-results/
+playwright-report/
 .env
 .env.*
 !.env.example

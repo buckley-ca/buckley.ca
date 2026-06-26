@@ -42,6 +42,12 @@ import ContactForm from '../components/ContactForm.astro';
 		animation-delay: 0.1s;
 	}
 
+	@media (prefers-reduced-motion: reduce) {
+		.contact {
+			animation: none;
+		}
+	}
+
 	h1 {
 		font-size: 3rem;
 		margin: 0 0 1rem 0;

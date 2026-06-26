@@ -38,6 +38,12 @@ import Logo from '../components/Logo.astro';
 		animation-delay: 0.1s;
 	}
 
+	@media (prefers-reduced-motion: reduce) {
+		.logo-container {
+			animation: none;
+		}
+	}
+
 	h1 {
 		color: #f2f2f2;
 		text-transform: uppercase;

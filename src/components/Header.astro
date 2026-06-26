@@ -1,14 +1,15 @@
 ---
-const { pathname } = Astro.url;
+// Normalize trailing slash — some hosts add one even with trailingSlash: 'never'
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
 ---
 
 <header>
 	<nav>
 		<ul>
-			<li class:list={[{ active: pathname === '/' }]}>
+			<li class:list={[{ active: path === '/' }]}>
 				<a href="/">Home</a>
 			</li>
-			<li class:list={[{ active: pathname === '/contact' }]}>
+			<li class:list={[{ active: path === '/contact' }]}>
 				<a href="/contact">Contact</a>
 			</li>
 		</ul>
