@@ -1,18 +1,15 @@
-<script>
-	import { page } from '$app/stores';
-</script>
+---
+import Layout from '../layouts/Layout.astro';
+---
 
-<svelte:head>
-	<title>Buckley.ca - Error</title>
-	<meta name="description" content="Buckley.ca - Error" />
-</svelte:head>
-
-<section class="center">
-	<div class="logo-container">
-		<h1>{$page.status} | {$page.error?.message ?? 'Unknown error'}</h1>
-		<p>Uh oh, you've encountered an error. Please go back <a href="/">home</a>.</p>
-	</div>
-</section>
+<Layout title="Buckley.ca - Not Found">
+	<section class="center">
+		<div class="box">
+			<h1>404 | Not Found</h1>
+			<p>Uh oh, you've encountered an error. Please go back <a href="/">home</a>.</p>
+		</div>
+	</section>
+</Layout>
 
 <style>
 	.center {
@@ -23,7 +20,7 @@
 		height: 95vh;
 	}
 
-	.logo-container {
+	.box {
 		text-align: center;
 		background-color: rgba(255, 255, 255, 0.75);
 		padding: 1rem;

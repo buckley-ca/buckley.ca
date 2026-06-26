@@ -2,7 +2,12 @@
 const config = {
   webServer: {
     command: "npm run build && npm run preview",
-    port: 4173,
+    port: 4321,
+  },
+  use: {
+    launchOptions: {
+      executablePath: '/opt/pw-browsers/chromium',
+    },
   },
 };
 
