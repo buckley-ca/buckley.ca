@@ -1,28 +1,28 @@
 {
-	"name": "buckley.ca",
-	"version": "0.0.1",
-	"private": true,
-	"type": "module",
-	"engines": {
-		"node": ">=24.0.0"
-	},
-	"scripts": {
-		"dev": "astro dev",
-		"build": "astro build && node scripts/flatten-sitemap.mjs",
-		"preview": "astro preview",
-		"check": "astro check",
-		"test": "playwright test",
-		"lint": "prettier --check .",
-		"format": "prettier --write ."
-	},
-	"devDependencies": {
-		"@astrojs/check": "^0.9.9",
-		"@astrojs/sitemap": "^3.7.3",
-		"@playwright/test": "^1.61.0",
-		"astro": "^7.0.0",
-		"prettier": "^3.8.4",
-		"prettier-plugin-astro": "^0.14.1",
-		"typescript": "^6.0.3"
-	},
-	"packageManager": "npm@11.17.0"
+  "name": "buckley.ca",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build && node scripts/flatten-sitemap.mjs",
+    "preview": "astro preview",
+    "check": "astro check",
+    "test": "playwright test",
+    "lint": "prettier --check .",
+    "format": "prettier --write ."
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.9",
+    "@astrojs/sitemap": "^3.7.3",
+    "@playwright/test": "^1.61.0",
+    "astro": "^7.0.0",
+    "prettier": "^3.8.4",
+    "prettier-plugin-astro": "^0.14.1",
+    "typescript": "^6.0.3"
+  },
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "packageManager": "npm@11.17.0"
 }

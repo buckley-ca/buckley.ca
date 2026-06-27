@@ -1,9 +1,9 @@
-import { defineConfig } from 'astro/config';
-import sitemap from '@astrojs/sitemap';
+import { defineConfig } from "astro/config";
+import sitemap from "@astrojs/sitemap";
 
 export default defineConfig({
-	site: 'https://www.buckley.ca',
-	output: 'static',
-	trailingSlash: 'never',
-	integrations: [sitemap()]
+  site: "https://www.buckley.ca",
+  output: "static",
+  trailingSlash: "never",
+  integrations: [sitemap()],
 });
