@@ -1,0 +1,53 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ContactForm from '../components/ContactForm.astro';
+---
+
+<Layout title="Buckley.ca - Contact">
+	<section class="center">
+		<div class="contact">
+			<h1>Contact</h1>
+			<ContactForm />
+		</div>
+	</section>
+</Layout>
+
+<style>
+	@keyframes fadeIn {
+		from {
+			opacity: 0;
+			transform: translateY(8px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	.center {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		height: 95vh;
+	}
+
+	.contact {
+		background-color: rgba(255, 255, 255, 0.75);
+		padding: 1rem;
+		border-radius: 10px;
+		animation: fadeIn 0.5s ease both;
+		animation-delay: 0.1s;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.contact {
+			animation: none;
+		}
+	}
+
+	h1 {
+		font-size: 3rem;
+		margin: 0 0 1rem 0;
+	}
+</style>

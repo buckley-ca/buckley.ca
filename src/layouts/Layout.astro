@@ -1,0 +1,59 @@
+---
+import Header from '../components/Header.astro';
+import '../styles/global.css';
+
+interface Props {
+	title: string;
+	description?: string;
+}
+
+const { title, description = title } = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const ogImage =
+	'https://res.cloudinary.com/buckey-ca/image/upload/f_auto,q_auto/background-1600_ovnjor.jpg';
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width,initial-scale=1" />
+		<link rel="icon" type="image/png" href="/favicon.png" />
+		<meta name="author" content="Sean Buckley" />
+		<title>{title}</title>
+		<meta name="description" content={description} />
+		<link rel="canonical" href={canonical} />
+
+		<!-- Open Graph / social previews -->
+		<meta property="og:type" content="website" />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:url" content={canonical} />
+		<meta property="og:image" content={ogImage} />
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content={title} />
+		<meta name="twitter:description" content={description} />
+		<meta name="twitter:image" content={ogImage} />
+	</head>
+	<body>
+		<main class="background">
+			<Header />
+			<slot />
+		</main>
+	</body>
+</html>
+
+<style>
+	.background {
+		background: url(https://res.cloudinary.com/buckey-ca/image/upload/f_auto,q_auto,dpr_auto/background-1600_ovnjor.jpg)
+			fixed no-repeat center center;
+		background-size: cover;
+	}
+
+	@media (max-width: 640px) {
+		.background {
+			background-image: url(https://res.cloudinary.com/buckey-ca/image/upload/f_auto,q_auto,c_fill,w_800,dpr_auto/background-1600_ovnjor.jpg);
+		}
+	}
+</style>

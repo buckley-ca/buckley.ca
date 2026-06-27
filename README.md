@@ -1,26 +1,38 @@
 # buckley.ca
 
-The official homepage of [buckley.ca](https://www.buckley.ca)
+The official homepage of [buckley.ca](https://www.buckley.ca) — a small static
+site built with [Astro](https://astro.build).
 
 ## Developing
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+Install dependencies and start a development server:
 
 ```bash
+npm install
 npm run dev
 
 # or start the server and open the app in a new browser tab
 npm run dev -- --open
 ```
 
-## Building
+## Scripts
 
-To create a production version of this site:
+| Command           | Description                               |
+| ----------------- | ----------------------------------------- |
+| `npm run dev`     | Start the local dev server                |
+| `npm run build`   | Build the production site to `dist/`      |
+| `npm run preview` | Preview the production build locally      |
+| `npm run check`   | Type-check `.astro` files (`astro check`) |
+| `npm run test`    | Run the Playwright end-to-end tests       |
+| `npm run lint`    | Check formatting with Prettier            |
+| `npm run format`  | Apply Prettier formatting                 |
+
+## Building & deploying
 
 ```bash
 npm run build
 ```
 
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+The site is fully static (`output: 'static'`) and is published to `dist/`.
+Deploys are handled by the Cloudflare Pages Git integration — no adapter is
+required.

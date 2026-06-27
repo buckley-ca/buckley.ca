@@ -1,27 +1,29 @@
-<script>
-	import Logo from '$lib/Logo.svelte';
-	import { onMount } from 'svelte';
-	import { fade } from 'svelte/transition';
+---
+import Layout from '../layouts/Layout.astro';
+import Logo from '../components/Logo.astro';
+---
 
-	let ready = $state(false);
-	onMount(() => (ready = true));
-</script>
-
-<svelte:head>
-	<title>Buckley.ca - Home</title>
-	<meta name="description" content="Buckley.ca - Home" />
-</svelte:head>
-
-<section class="center">
-	{#if ready}
-		<div class="logo-container" in:fade={{ delay: 100, duration: 1500 }}>
+<Layout title="Buckley.ca - Home">
+	<section class="center">
+		<div class="logo-container">
 			<Logo />
 			<h1>buckley<span>.ca</span></h1>
 		</div>
-	{/if}
-</section>
+	</section>
+</Layout>
 
 <style>
+	@keyframes fadeIn {
+		from {
+			opacity: 0;
+			transform: translateY(8px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
 	.center {
 		display: flex;
 		flex-direction: column;
@@ -32,6 +34,14 @@
 
 	.logo-container {
 		text-align: center;
+		animation: fadeIn 1.5s ease both;
+		animation-delay: 0.1s;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.logo-container {
+			animation: none;
+		}
 	}
 
 	h1 {
