@@ -7,6 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- SEO/social meta in `Layout.astro`: canonical link, Open Graph and Twitter Card tags
+- `site` set in `astro.config.mjs` (enables absolute canonical URLs)
+- `public/robots.txt` and `public/sitemap.xml`
+- `.github/workflows/ci.yml`: runs lint, type-check, build, and Playwright tests on PRs
+- `engines.node` (`>=22`) in `package.json`, matching `.npmrc`'s `engine-strict`
+
+### Changed
+
+- `README.md` rewritten for Astro (was still SvelteKit boilerplate)
+- Bumped `dependency-review.yml` actions (`checkout@v4`, `dependency-review-action@v4`)
+- Accessibility: SVG logo `role="img"`/`aria-label`, nav `aria-current`, honeypot
+  field made inert (`tabindex="-1"`, `aria-hidden`), `autocomplete` on email field
+
+### Removed
+
+- Obsolete/invalid CSS: bogus `-webkit-padding`, redundant `-moz-`/`-webkit-`
+  `border-radius`, `background-size`, and `filter` vendor prefixes; deduped the
+  background-image media query
+
 ### Fixed
 
 - **tests/test.js**: Fixed broken test - was expecting "Welcome to SvelteKit", now expects "buckley"

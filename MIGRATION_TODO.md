@@ -26,12 +26,15 @@ none of it can be done from a commit.
 These require account access and cannot be automated from the repo.
 
 ### 1. Open the PR
+
 - [ ] Open a PR from `migrate-sveltekit-to-astro` → `master` (draft is fine).
 - [ ] Let Cloudflare Pages + Vercel Git integrations build their previews — the preview
       deploy is the real end-to-end test of the new static config.
 
 ### 2. Vercel dashboard — DO BEFORE MERGING (most important)
+
 Project → Settings → Build & Development Settings:
+
 - [ ] **Framework Preset: change SvelteKit → Astro.** Critical. If left as SvelteKit,
       Vercel looks for SvelteKit output paths that no longer exist and the build fails.
 - [ ] **Output Directory: explicitly set to `dist`.** Do not trust the Astro preset
@@ -42,7 +45,9 @@ Project → Settings → Build & Development Settings:
       failed — flip preset, then redeploy.
 
 ### 3. Cloudflare Pages dashboard
+
 Workers & Pages → `buckley-ca` → Settings → Build & Deployments:
+
 - [ ] Confirm build output dir shows `dist` (wrangler.toml now sets
       `pages_build_output_dir = "./dist"`, so it should pick this up).
 - [ ] Remove any leftover `nodejs_compat` compatibility flag set in the dashboard — it's
@@ -50,7 +55,9 @@ Workers & Pages → `buckley-ca` → Settings → Build & Deployments:
 - [ ] Confirm build command is `npm run build` (now runs `astro build`).
 
 ### 4. Live smoke check (after deploy succeeds)
+
 On the deployed preview/production URL:
+
 - [ ] `/` → h1 contains "buckley", "Home" nav bold, Cloudinary background loads
 - [ ] `/contact` → "Contact" nav bold, form visible
 - [ ] `/contact/` (trailing slash) → redirects to `/contact` (confirms `trailingSlash: 'never'`)
@@ -59,6 +66,7 @@ On the deployed preview/production URL:
       `https://formspree.io/f/xdojdnkk` unchanged)
 
 ### 5. Merge + cleanup
+
 - [ ] Merge PR to `master` once previews are green.
 - [ ] Confirm production auto-deploys on both hosts from `master`.
 - [ ] Delete the `migrate-sveltekit-to-astro` branch.
@@ -68,6 +76,7 @@ On the deployed preview/production URL:
 ## TODO — For a future AI agent
 
 ### Context you need
+
 - This is a 2-page static personal site. SvelteKit was used only as a build tool/router.
 - Migration strategy was: full native Astro, no `@astrojs/svelte` integration. All 3
   components are now `.astro` files.
@@ -80,15 +89,19 @@ On the deployed preview/production URL:
   from the proxy, that is an egress-policy denial — report it, do not route around it.
 
 ### If asked to continue the code work
+
 First re-establish the baseline (container is fresh each session):
+
 ```bash
 cd <repo> && git checkout migrate-sveltekit-to-astro
 npm install
 npm run check && npm run build && npx playwright test && npm run lint
 ```
+
 All should pass. Then make changes.
 
 ### Known deviations from the original plan (intentional)
+
 - **Tooling is Prettier-only.** ESLint was removed: the repo had eslint v10, which only
   supports flat config (`eslint.config.js`), but the migration kept the legacy
   `.eslintrc.cjs` — so `npm run lint`'s eslint half was broken. Given zero application
@@ -100,6 +113,7 @@ All should pass. Then make changes.
   Prettier reformatting (double→single quotes). Harmless; keeps `prettier --check` green.
 
 ### Refinements applied in commit d215008 (so you don't redo or revert them)
+
 - `astro.config.mjs`: added `trailingSlash: 'never'` (matches prior SvelteKit URLs).
 - `src/components/Header.astro`: active-link uses normalized path
   `Astro.url.pathname.replace(/\/$/, '') || '/'` to survive a host adding a trailing slash.
@@ -114,6 +128,7 @@ All should pass. Then make changes.
 - `.gitignore` / `.prettierignore`: replaced SvelteKit paths with `dist/` + `.astro/`.
 
 ### Not implemented (was in plan, deliberately skipped or deferred)
+
 - **Visual snapshot tests** were planned (component-level, Cloudinary mocked,
   reducedMotion) but only the structural tests were committed. The
   `prefers-reduced-motion` resets ARE in place, so adding snapshots later is low-friction:
@@ -124,6 +139,7 @@ All should pass. Then make changes.
   committed state.
 
 ### Astro 7 notes (verified during this work)
+
 - `<slot />`, `output: 'static'`, `Astro.url`, `class:list` unchanged in v7.
 - Rust compiler is stricter — the `<!-- svelte-ignore -->` comment was removed from
   `Logo.astro`. Keep all ported HTML valid.
@@ -134,12 +150,12 @@ All should pass. Then make changes.
 
 ## Quick reference
 
-| Item | Value |
-|------|-------|
-| Branch | `migrate-sveltekit-to-astro` |
-| Base | `92b24a4` (pre-migration SvelteKit `master`) |
-| Formspree endpoint | `https://formspree.io/f/xdojdnkk` |
-| CF Pages project | `buckley-ca` |
-| Dev/preview port | `4321` |
-| Build output | `dist/` |
-| Node minimum | 22 (repo pins `^24.0.0`) |
+| Item               | Value                                        |
+| ------------------ | -------------------------------------------- |
+| Branch             | `migrate-sveltekit-to-astro`                 |
+| Base               | `92b24a4` (pre-migration SvelteKit `master`) |
+| Formspree endpoint | `https://formspree.io/f/xdojdnkk`            |
+| CF Pages project   | `buckley-ca`                                 |
+| Dev/preview port   | `4321`                                       |
+| Build output       | `dist/`                                      |
+| Node minimum       | 22 (repo pins `^24.0.0`)                     |

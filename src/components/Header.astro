@@ -4,13 +4,13 @@ const path = Astro.url.pathname.replace(/\/$/, '') || '/';
 ---
 
 <header>
-	<nav>
+	<nav aria-label="Primary">
 		<ul>
 			<li class:list={[{ active: path === '/' }]}>
-				<a href="/">Home</a>
+				<a href="/" aria-current={path === '/' ? 'page' : undefined}>Home</a>
 			</li>
 			<li class:list={[{ active: path === '/contact' }]}>
-				<a href="/contact">Contact</a>
+				<a href="/contact" aria-current={path === '/contact' ? 'page' : undefined}>Contact</a>
 			</li>
 		</ul>
 	</nav>
