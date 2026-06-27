@@ -1,0 +1,22 @@
+# Security headers for Cloudflare Pages.
+# https://developers.cloudflare.com/pages/configuration/headers/
+# This file is copied verbatim into dist/ at build time and applied by the
+# Cloudflare Pages edge. (Note: it is NOT applied by `astro preview`, and Vercel
+# previews ignore it — Vercel uses vercel.json.)
+#
+# The Content-Security-Policy below is tailored to exactly what the site loads:
+#   - default-src 'self'              everything same-origin unless listed
+#   - img-src ... res.cloudinary.com  the fixed background photo (favicon/og are same-origin)
+#   - style-src 'unsafe-inline'       Astro inlines scoped <style>, plus the honeypot style="" attr
+#   - script-src 'self'               no runtime JS; the JSON-LD block is non-executable
+#   - form-action ... formspree.io    the contact form POSTs to Formspree
+# If you add an analytics script, web font, or other origin, widen the matching
+# directive or the browser will block it.
+
+/*
+  Content-Security-Policy: default-src 'self'; img-src 'self' https://res.cloudinary.com; style-src 'self' 'unsafe-inline'; script-src 'self'; font-src 'self'; form-action https://formspree.io; frame-ancestors 'none'; base-uri 'self'; object-src 'none'; upgrade-insecure-requests
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-Frame-Options: DENY
+  Permissions-Policy: accelerometer=(), autoplay=(), camera=(), display-capture=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()
+  Strict-Transport-Security: max-age=31536000
