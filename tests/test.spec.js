@@ -61,3 +61,21 @@ test('contact page meta description', async ({ page }) => {
 	await page.goto('/contact');
 	await expect(page.locator('meta[name="description"]')).toHaveAttribute('content', /Buckley/i);
 });
+
+test('home page has JSON-LD structured data', async ({ page }) => {
+	await page.goto('/');
+	const ld = await page.locator('script[type="application/ld+json"]').textContent();
+	const data = JSON.parse(ld);
+	expect(data['@graph'].map((n) => n['@type'])).toContain('WebSite');
+	expect(data['@graph'].map((n) => n['@type'])).toContain('Person');
+});
+
+test('sitemap.xml is a flat urlset listing site pages', async ({ request }) => {
+	const res = await request.get('/sitemap.xml');
+	expect(res.ok()).toBeTruthy();
+	const body = await res.text();
+	expect(body).toContain('<urlset');
+	expect(body).not.toContain('<sitemapindex');
+	expect(body).toContain('<loc>https://www.buckley.ca</loc>');
+	expect(body).toContain('<loc>https://www.buckley.ca/contact</loc>');
+});

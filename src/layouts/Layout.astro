@@ -12,6 +12,26 @@ const { title, description = title } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const ogImage =
 	'https://res.cloudinary.com/buckey-ca/image/upload/f_auto,q_auto/background-1600_ovnjor.jpg';
+
+const siteUrl = Astro.site?.href ?? canonical;
+const structuredData = {
+	'@context': 'https://schema.org',
+	'@graph': [
+		{
+			'@type': 'WebSite',
+			'@id': `${siteUrl}#website`,
+			url: siteUrl,
+			name: 'buckley.ca',
+			publisher: { '@id': `${siteUrl}#person` }
+		},
+		{
+			'@type': 'Person',
+			'@id': `${siteUrl}#person`,
+			name: 'Sean Buckley',
+			url: siteUrl
+		}
+	]
+};
 ---
 
 <!doctype html>
@@ -35,6 +55,9 @@ const ogImage =
 		<meta name="twitter:title" content={title} />
 		<meta name="twitter:description" content={description} />
 		<meta name="twitter:image" content={ogImage} />
+
+		<!-- Structured data for search engines / AI agents -->
+		<script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
 	</head>
 	<body>
 		<main class="background">
