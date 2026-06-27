@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `site` set in `astro.config.mjs` (enables absolute canonical URLs)
 - `public/robots.txt` and `public/sitemap.xml`
 - `.github/workflows/ci.yml`: runs lint, type-check, build, and Playwright tests on PRs
+- `engines.node` (`^24.0.0`) in `package.json` so Vercel (which does not read
+  `.node-version`) builds on a Node version Astro 7 supports
 
 ### Changed
 
