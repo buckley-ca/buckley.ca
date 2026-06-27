@@ -10,8 +10,11 @@ interface Props {
 const { title, description = title } = Astro.props;
 
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
+// Canonical 1200x630 social card (the de-facto Open Graph size), cropped from
+// the site's background image via Cloudinary so og:image:width/height are accurate.
 const ogImage =
-	'https://res.cloudinary.com/buckey-ca/image/upload/f_auto,q_auto/background-1600_ovnjor.jpg';
+	'https://res.cloudinary.com/buckey-ca/image/upload/c_fill,g_auto,w_1200,h_630,f_auto,q_auto/background-1600_ovnjor.jpg';
+const ogImageAlt = 'buckley.ca';
 
 const siteUrl = Astro.site?.href ?? canonical;
 const structuredData = {
@@ -47,14 +50,19 @@ const structuredData = {
 
 		<!-- Open Graph / social previews -->
 		<meta property="og:type" content="website" />
+		<meta property="og:site_name" content="buckley.ca" />
 		<meta property="og:title" content={title} />
 		<meta property="og:description" content={description} />
 		<meta property="og:url" content={canonical} />
 		<meta property="og:image" content={ogImage} />
+		<meta property="og:image:width" content="1200" />
+		<meta property="og:image:height" content="630" />
+		<meta property="og:image:alt" content={ogImageAlt} />
 		<meta name="twitter:card" content="summary_large_image" />
 		<meta name="twitter:title" content={title} />
 		<meta name="twitter:description" content={description} />
 		<meta name="twitter:image" content={ogImage} />
+		<meta name="twitter:image:alt" content={ogImageAlt} />
 
 		<!-- Structured data for search engines / AI agents -->
 		<script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />

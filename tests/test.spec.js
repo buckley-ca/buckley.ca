@@ -79,3 +79,22 @@ test('sitemap.xml is a flat urlset listing site pages', async ({ request }) => {
 	expect(body).toContain('<loc>https://www.buckley.ca</loc>');
 	expect(body).toContain('<loc>https://www.buckley.ca/contact</loc>');
 });
+
+test('llms.txt is served and describes the site', async ({ request }) => {
+	const res = await request.get('/llms.txt');
+	expect(res.ok()).toBeTruthy();
+	const body = await res.text();
+	expect(body).toContain('# buckley.ca');
+	expect(body).toContain('https://www.buckley.ca/contact');
+});
+
+test('home page has og:image with alt and dimensions', async ({ page }) => {
+	await page.goto('/');
+	await expect(page.locator('meta[property="og:image"]')).toHaveAttribute('content', /cloudinary/);
+	await expect(page.locator('meta[property="og:image:width"]')).toHaveAttribute('content', '1200');
+	await expect(page.locator('meta[property="og:image:height"]')).toHaveAttribute('content', '630');
+	await expect(page.locator('meta[property="og:image:alt"]')).toHaveAttribute(
+		'content',
+		/buckley/i
+	);
+});

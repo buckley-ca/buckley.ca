@@ -1,0 +1,16 @@
+# buckley.ca
+
+> The official personal homepage of Sean Buckley — a small, static two-page website.
+
+buckley.ca is a minimal static site (built with Astro) belonging to Sean Buckley.
+There are two pages: a home page and a contact page. There is no blog, store, or
+application — it is a personal landing site.
+
+## Pages
+
+- [Home](https://www.buckley.ca/): Landing page showing the buckley.ca logo.
+- [Contact](https://www.buckley.ca/contact): A form to reach Sean Buckley by email.
+
+## Contact
+
+- To get in touch, use the contact form at https://www.buckley.ca/contact.
