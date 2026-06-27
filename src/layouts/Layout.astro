@@ -10,10 +10,10 @@ interface Props {
 const { title, description = title } = Astro.props;
 
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
-// Canonical 1200x630 social card (the de-facto Open Graph size), cropped from
-// the site's background image via Cloudinary so og:image:width/height are accurate.
-const ogImage =
-	'https://res.cloudinary.com/buckey-ca/image/upload/c_fill,g_auto,w_1200,h_630,f_auto,q_auto/background-1600_ovnjor.jpg';
+// Purpose-built 1200x630 social card (the de-facto Open Graph size): the
+// buckley.ca logo and wordmark. Served from /public so og:image:width/height
+// are accurate and there's no external dependency. See scripts/og-card.html.
+const ogImage = new URL('/og.png', Astro.site ?? canonical).href;
 const ogImageAlt = 'buckley.ca';
 
 const siteUrl = Astro.site?.href ?? canonical;

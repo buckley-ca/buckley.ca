@@ -90,7 +90,10 @@ test('llms.txt is served and describes the site', async ({ request }) => {
 
 test('home page has og:image with alt and dimensions', async ({ page }) => {
 	await page.goto('/');
-	await expect(page.locator('meta[property="og:image"]')).toHaveAttribute('content', /cloudinary/);
+	await expect(page.locator('meta[property="og:image"]')).toHaveAttribute(
+		'content',
+		'https://www.buckley.ca/og.png'
+	);
 	await expect(page.locator('meta[property="og:image:width"]')).toHaveAttribute('content', '1200');
 	await expect(page.locator('meta[property="og:image:height"]')).toHaveAttribute('content', '630');
 	await expect(page.locator('meta[property="og:image:alt"]')).toHaveAttribute(
