@@ -1,4 +1,6 @@
 import { expect, test } from "@playwright/test";
+import { readFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
 
 // --- Structural assertions (primary gate, deterministic) ---
 
@@ -101,3 +103,42 @@ test("home page has og:image with alt and dimensions", async ({ page }) => {
     /buckley/i,
   );
 });
+
+// --- CSP drift guard ---
+// Read the real policy from public/_headers so this test always reflects what
+// ships. Load each page with that CSP applied to the document response and fail
+// if the browser reports any violation — i.e. if the site ever loads a resource
+// the policy doesn't allow (a new third-party script, font, image host, etc.),
+// CI goes red at PR time instead of the site silently breaking in production.
+function readCsp() {
+  const headersPath = fileURLToPath(new URL("../public/_headers", import.meta.url));
+  const text = readFileSync(headersPath, "utf8");
+  const match = text.match(/^\s*Content-Security-Policy:\s*(.+)$/m);
+  if (!match) throw new Error("Content-Security-Policy not found in public/_headers");
+  return match[1].trim();
+}
+const csp = readCsp();
+
+for (const path of ["/", "/contact"]) {
+  test(`no CSP violations on ${path}`, async ({ page }) => {
+    const violations = [];
+    page.on("console", (msg) => {
+      if (/Content Security Policy/i.test(msg.text())) violations.push(msg.text());
+    });
+    // Apply the real CSP to the navigated document; let subresources load normally.
+    await page.route("**/*", async (route) => {
+      if (route.request().resourceType() === "document") {
+        const res = await route.fetch();
+        await route.fulfill({
+          response: res,
+          headers: { ...res.headers(), "content-security-policy": csp },
+        });
+      } else {
+        await route.continue();
+      }
+    });
+    await page.goto(path, { waitUntil: "domcontentloaded" });
+    await page.waitForTimeout(500);
+    expect(violations, violations.join("\n")).toEqual([]);
+  });
+}
