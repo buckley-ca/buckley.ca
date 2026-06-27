@@ -69,3 +69,13 @@ test('home page has JSON-LD structured data', async ({ page }) => {
 	expect(data['@graph'].map((n) => n['@type'])).toContain('WebSite');
 	expect(data['@graph'].map((n) => n['@type'])).toContain('Person');
 });
+
+test('sitemap.xml is a flat urlset listing site pages', async ({ request }) => {
+	const res = await request.get('/sitemap.xml');
+	expect(res.ok()).toBeTruthy();
+	const body = await res.text();
+	expect(body).toContain('<urlset');
+	expect(body).not.toContain('<sitemapindex');
+	expect(body).toContain('<loc>https://www.buckley.ca</loc>');
+	expect(body).toContain('<loc>https://www.buckley.ca/contact</loc>');
+});
