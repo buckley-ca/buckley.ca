@@ -1,42 +1,42 @@
 ---
-import Layout from '../layouts/Layout.astro';
+import Layout from "../layouts/Layout.astro";
 ---
 
 <Layout title="Buckley.ca - Not Found">
-	<section class="center">
-		<div class="box">
-			<h1>404 | Not Found</h1>
-			<p>Uh oh, you've encountered an error. Please go back <a href="/">home</a>.</p>
-		</div>
-	</section>
+  <section class="center">
+    <div class="box">
+      <h1>404 | Not Found</h1>
+      <p>Uh oh, you've encountered an error. Please go back <a href="/">home</a>.</p>
+    </div>
+  </section>
 </Layout>
 
 <style>
-	.center {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		height: 95vh;
-	}
+  .center {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 95vh;
+  }
 
-	.box {
-		text-align: center;
-		background-color: rgba(255, 255, 255, 0.75);
-		padding: 1rem;
-		border-radius: 10px;
-	}
+  .box {
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.75);
+    padding: 1rem;
+    border-radius: 10px;
+  }
 
-	h1 {
-		font-size: 3rem;
-		font-weight: 600;
-		margin: 0;
-		text-shadow: 0.4px 0.8px 0.8px hsl(0deg 0% 0% / 0.15);
-	}
+  h1 {
+    font-size: 3rem;
+    font-weight: 600;
+    margin: 0;
+    text-shadow: 0.4px 0.8px 0.8px hsl(0deg 0% 0% / 0.15);
+  }
 
-	@media (min-width: 640px) {
-		section {
-			max-width: none;
-		}
-	}
+  @media (min-width: 640px) {
+    section {
+      max-width: none;
+    }
+  }
 </style>
