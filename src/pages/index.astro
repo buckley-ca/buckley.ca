@@ -1,66 +1,66 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import Logo from '../components/Logo.astro';
+import Layout from "../layouts/Layout.astro";
+import Logo from "../components/Logo.astro";
 ---
 
 <Layout title="Buckley.ca - Home">
-	<section class="center">
-		<div class="logo-container">
-			<Logo />
-			<h1>buckley<span>.ca</span></h1>
-		</div>
-	</section>
+  <section class="center">
+    <div class="logo-container">
+      <Logo />
+      <h1>buckley<span>.ca</span></h1>
+    </div>
+  </section>
 </Layout>
 
 <style>
-	@keyframes fadeIn {
-		from {
-			opacity: 0;
-			transform: translateY(8px);
-		}
-		to {
-			opacity: 1;
-			transform: translateY(0);
-		}
-	}
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 
-	.center {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		height: 95vh;
-	}
+  .center {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 95vh;
+  }
 
-	.logo-container {
-		text-align: center;
-		animation: fadeIn 1.5s ease both;
-		animation-delay: 0.1s;
-	}
+  .logo-container {
+    text-align: center;
+    animation: fadeIn 1.5s ease both;
+    animation-delay: 0.1s;
+  }
 
-	@media (prefers-reduced-motion: reduce) {
-		.logo-container {
-			animation: none;
-		}
-	}
+  @media (prefers-reduced-motion: reduce) {
+    .logo-container {
+      animation: none;
+    }
+  }
 
-	h1 {
-		color: #f2f2f2;
-		text-transform: uppercase;
-		font-size: 4rem;
-		font-weight: 600;
-		margin: 0;
-		text-shadow: 0.4px 0.8px 0.8px hsl(0deg 0% 0% / 0.15);
-	}
+  h1 {
+    color: #f2f2f2;
+    text-transform: uppercase;
+    font-size: 4rem;
+    font-weight: 600;
+    margin: 0;
+    text-shadow: 0.4px 0.8px 0.8px hsl(0deg 0% 0% / 0.15);
+  }
 
-	h1 span {
-		font-size: 1.5rem;
-		right: 0.5rem;
-	}
+  h1 span {
+    font-size: 1.5rem;
+    right: 0.5rem;
+  }
 
-	@media (min-width: 640px) {
-		section {
-			max-width: none;
-		}
-	}
+  @media (min-width: 640px) {
+    section {
+      max-width: none;
+    }
+  }
 </style>

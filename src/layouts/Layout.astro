@@ -1,10 +1,10 @@
 ---
-import Header from '../components/Header.astro';
-import '../styles/global.css';
+import Header from "../components/Header.astro";
+import "../styles/global.css";
 
 interface Props {
-	title: string;
-	description?: string;
+  title: string;
+  description?: string;
 }
 
 const { title, description = title } = Astro.props;
@@ -13,78 +13,78 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
 // Purpose-built 1200x630 social card (the de-facto Open Graph size): the
 // buckley.ca logo and wordmark. Served from /public so og:image:width/height
 // are accurate and there's no external dependency. See scripts/og-card.html.
-const ogImage = new URL('/og.png', Astro.site ?? canonical).href;
-const ogImageAlt = 'buckley.ca';
+const ogImage = new URL("/og.png", Astro.site ?? canonical).href;
+const ogImageAlt = "buckley.ca";
 
 const siteUrl = Astro.site?.href ?? canonical;
 const structuredData = {
-	'@context': 'https://schema.org',
-	'@graph': [
-		{
-			'@type': 'WebSite',
-			'@id': `${siteUrl}#website`,
-			url: siteUrl,
-			name: 'buckley.ca',
-			publisher: { '@id': `${siteUrl}#person` }
-		},
-		{
-			'@type': 'Person',
-			'@id': `${siteUrl}#person`,
-			name: 'Sean Buckley',
-			url: siteUrl
-		}
-	]
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": `${siteUrl}#website`,
+      url: siteUrl,
+      name: "buckley.ca",
+      publisher: { "@id": `${siteUrl}#person` },
+    },
+    {
+      "@type": "Person",
+      "@id": `${siteUrl}#person`,
+      name: "Sean Buckley",
+      url: siteUrl,
+    },
+  ],
 };
 ---
 
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width,initial-scale=1" />
-		<link rel="icon" type="image/png" href="/favicon.png" />
-		<meta name="author" content="Sean Buckley" />
-		<title>{title}</title>
-		<meta name="description" content={description} />
-		<link rel="canonical" href={canonical} />
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <meta name="author" content="Sean Buckley" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
 
-		<!-- Open Graph / social previews -->
-		<meta property="og:type" content="website" />
-		<meta property="og:site_name" content="buckley.ca" />
-		<meta property="og:title" content={title} />
-		<meta property="og:description" content={description} />
-		<meta property="og:url" content={canonical} />
-		<meta property="og:image" content={ogImage} />
-		<meta property="og:image:width" content="1200" />
-		<meta property="og:image:height" content="630" />
-		<meta property="og:image:alt" content={ogImageAlt} />
-		<meta name="twitter:card" content="summary_large_image" />
-		<meta name="twitter:title" content={title} />
-		<meta name="twitter:description" content={description} />
-		<meta name="twitter:image" content={ogImage} />
-		<meta name="twitter:image:alt" content={ogImageAlt} />
+    <!-- Open Graph / social previews -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="buckley.ca" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={ogImageAlt} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image:alt" content={ogImageAlt} />
 
-		<!-- Structured data for search engines / AI agents -->
-		<script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
-	</head>
-	<body>
-		<main class="background">
-			<Header />
-			<slot />
-		</main>
-	</body>
+    <!-- Structured data for search engines / AI agents -->
+    <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
+  </head>
+  <body>
+    <main class="background">
+      <Header />
+      <slot />
+    </main>
+  </body>
 </html>
 
 <style>
-	.background {
-		background: url(https://res.cloudinary.com/buckey-ca/image/upload/f_auto,q_auto,dpr_auto/background-1600_ovnjor.jpg)
-			fixed no-repeat center center;
-		background-size: cover;
-	}
+  .background {
+    background: url(https://res.cloudinary.com/buckey-ca/image/upload/f_auto,q_auto,dpr_auto/background-1600_ovnjor.jpg)
+      fixed no-repeat center center;
+    background-size: cover;
+  }
 
-	@media (max-width: 640px) {
-		.background {
-			background-image: url(https://res.cloudinary.com/buckey-ca/image/upload/f_auto,q_auto,c_fill,w_800,dpr_auto/background-1600_ovnjor.jpg);
-		}
-	}
+  @media (max-width: 640px) {
+    .background {
+      background-image: url(https://res.cloudinary.com/buckey-ca/image/upload/f_auto,q_auto,c_fill,w_800,dpr_auto/background-1600_ovnjor.jpg);
+    }
+  }
 </style>
