@@ -110,14 +110,57 @@ test("home page has og:image with alt and dimensions", async ({ page }) => {
 // if the browser reports any violation — i.e. if the site ever loads a resource
 // the policy doesn't allow (a new third-party script, font, image host, etc.),
 // CI goes red at PR time instead of the site silently breaking in production.
-function readCsp() {
-  const headersPath = fileURLToPath(new URL("../public/_headers", import.meta.url));
-  const text = readFileSync(headersPath, "utf8");
-  const match = text.match(/^\s*Content-Security-Policy:\s*(.+)$/m);
-  if (!match) throw new Error("Content-Security-Policy not found in public/_headers");
-  return match[1].trim();
+// Parse the `/*` rule of public/_headers into a { header: value } map.
+function parseCloudflareHeaders() {
+  const text = readFileSync(fileURLToPath(new URL("../public/_headers", import.meta.url)), "utf8");
+  const map = {};
+  let inRule = false;
+  for (const line of text.split("\n")) {
+    if (line.startsWith("/")) {
+      inRule = true;
+      continue;
+    }
+    if (!inRule) continue;
+    const m = line.match(/^\s+([A-Za-z-]+):\s*(.+)$/);
+    if (m) map[m[1]] = m[2].trim();
+  }
+  return map;
 }
-const csp = readCsp();
+
+// Flatten vercel.json's headers config into the same { header: value } map.
+function parseVercelHeaders() {
+  const json = JSON.parse(
+    readFileSync(fileURLToPath(new URL("../vercel.json", import.meta.url)), "utf8"),
+  );
+  const map = {};
+  for (const rule of json.headers ?? []) {
+    for (const h of rule.headers ?? []) map[h.key] = h.value.trim();
+  }
+  return map;
+}
+
+const cloudflareHeaders = parseCloudflareHeaders();
+const csp = cloudflareHeaders["Content-Security-Policy"];
+
+// Cloudflare (_headers) and Vercel (vercel.json) are separate files; keep them
+// in lockstep so a header changed in one host isn't forgotten in the other.
+test("vercel.json security headers match public/_headers", () => {
+  const vercelHeaders = parseVercelHeaders();
+  const securityHeaders = [
+    "Content-Security-Policy",
+    "X-Content-Type-Options",
+    "Referrer-Policy",
+    "X-Frame-Options",
+    "Permissions-Policy",
+    "Strict-Transport-Security",
+  ];
+  for (const key of securityHeaders) {
+    expect(cloudflareHeaders[key], `${key} present in public/_headers`).toBeTruthy();
+    expect(vercelHeaders[key], `${key} in vercel.json matches public/_headers`).toBe(
+      cloudflareHeaders[key],
+    );
+  }
+});
 
 for (const path of ["/", "/contact"]) {
   test(`no CSP violations on ${path}`, async ({ page }) => {

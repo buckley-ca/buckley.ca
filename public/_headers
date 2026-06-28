@@ -1,8 +1,9 @@
 # Security headers for Cloudflare Pages.
 # https://developers.cloudflare.com/pages/configuration/headers/
 # This file is copied verbatim into dist/ at build time and applied by the
-# Cloudflare Pages edge. (Note: it is NOT applied by `astro preview`, and Vercel
-# previews ignore it — Vercel uses vercel.json.)
+# Cloudflare Pages edge. (Note: it is NOT applied by `astro preview`.) Vercel
+# does not read _headers — vercel.json mirrors these headers for Vercel, and a
+# test (tests/test.spec.js) asserts the two stay identical so they can't drift.
 #
 # Content-Security-Policy philosophy: lock down the high-risk directive
 # (script-src) and stay permissive on the directives that commonly change as the
