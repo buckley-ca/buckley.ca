@@ -1,0 +1,30 @@
+# Security headers for Cloudflare Pages.
+# https://developers.cloudflare.com/pages/configuration/headers/
+# This file is copied verbatim into dist/ at build time and applied by the
+# Cloudflare Pages edge. (Note: it is NOT applied by `astro preview`.) Vercel
+# does not read _headers — vercel.json mirrors these headers for Vercel, and a
+# test (tests/test.spec.js) asserts the two stay identical so they can't drift.
+#
+# Content-Security-Policy philosophy: lock down the high-risk directive
+# (script-src) and stay permissive on the directives that commonly change as the
+# site grows, so adding pages/images/fonts/styles doesn't silently break.
+#   - script-src 'self'   only first-party JS runs. Astro bundles framework
+#                         islands (React/Svelte/etc.) as same-origin module
+#                         scripts, so 'self' already covers them. A *third-party*
+#                         script (analytics, a CDN) would need its origin added
+#                         here — and tests/test.spec.js will fail loudly if a page
+#                         ever loads something this policy blocks.
+#   - img/style/font      allow any https: source (+ data:) so new images, web
+#                         fonts, or inline styles Just Work.
+#   - connect-src 'self'  same-origin fetch/XHR only. If you add client-side
+#                         calls to a third-party API, widen this (the page-load
+#                         test can't catch runtime fetches).
+#   - form-action         the contact form posts to Formspree.
+
+/*
+  Content-Security-Policy: default-src 'self'; img-src 'self' https: data:; style-src 'self' 'unsafe-inline' https:; script-src 'self'; font-src 'self' https: data:; connect-src 'self'; form-action 'self' https://formspree.io; frame-ancestors 'none'; base-uri 'self'; object-src 'none'; upgrade-insecure-requests
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-Frame-Options: DENY
+  Permissions-Policy: accelerometer=(), autoplay=(), camera=(), display-capture=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()
+  Strict-Transport-Security: max-age=31536000
