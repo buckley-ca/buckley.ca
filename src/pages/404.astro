@@ -2,10 +2,7 @@
 import Layout from "../layouts/Layout.astro";
 ---
 
-<Layout
-  title="Buckley.ca - Not Found"
-  description="The page you're looking for couldn't be found."
->
+<Layout title="Buckley.ca - Not Found" description="The page you're looking for couldn't be found.">
   <section class="center">
     <div class="box">
       <svg
@@ -15,21 +12,21 @@ import Layout from "../layouts/Layout.astro";
         role="img"
         aria-label="A compass, to help you find your way"
       >
-        <circle class="ring" cx="100" cy="100" r="80" />
-        <circle class="ring ring--inner" cx="100" cy="100" r="66" />
+        <circle class="ring" cx="100" cy="100" r="80"></circle>
+        <circle class="ring ring--inner" cx="100" cy="100" r="66"></circle>
 
         <!-- Cardinal ticks, set in the gap between the two rings -->
         <g class="ticks">
-          <line x1="100" y1="22" x2="100" y2="30" />
-          <line x1="100" y1="170" x2="100" y2="178" />
-          <line x1="22" y1="100" x2="30" y2="100" />
-          <line x1="170" y1="100" x2="178" y2="100" />
+          <line x1="100" y1="22" x2="100" y2="30"></line>
+          <line x1="100" y1="170" x2="100" y2="178"></line>
+          <line x1="22" y1="100" x2="30" y2="100"></line>
+          <line x1="170" y1="100" x2="178" y2="100"></line>
         </g>
 
         <!-- Needle -->
-        <polygon class="needle needle--n" points="100,62 110,100 100,106 90,100" />
-        <polygon class="needle needle--s" points="100,138 110,100 100,94 90,100" />
-        <circle class="hub" cx="100" cy="100" r="6" />
+        <polygon class="needle needle--n" points="100,62 110,100 100,106 90,100"></polygon>
+        <polygon class="needle needle--s" points="100,138 110,100 100,94 90,100"></polygon>
+        <circle class="hub" cx="100" cy="100" r="6"></circle>
 
         <!-- Cardinal letters, inside the rings so nothing clips them -->
         <text class="dir" x="100" y="51" text-anchor="middle" dominant-baseline="middle">N</text>
@@ -40,8 +37,8 @@ import Layout from "../layouts/Layout.astro";
 
       <h1>404 | Page not found</h1>
       <p>
-        Looks like you've wandered off the map. The page you're after may have
-        moved, or it never existed in the first place.
+        Looks like you've wandered off the map. The page you're after may have moved, or it never
+        existed in the first place.
       </p>
 
       <nav class="links" aria-label="Get back on track">
