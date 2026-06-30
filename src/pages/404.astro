@@ -2,11 +2,49 @@
 import Layout from "../layouts/Layout.astro";
 ---
 
-<Layout title="Buckley.ca - Not Found">
+<Layout title="Buckley.ca - Not Found" description="The page you're looking for couldn't be found.">
   <section class="center">
     <div class="box">
-      <h1>404 | Not Found</h1>
-      <p>Uh oh, you've encountered an error. Please go back <a href="/">home</a>.</p>
+      <svg
+        class="compass"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 200 200"
+        role="img"
+        aria-label="A compass, to help you find your way"
+      >
+        <circle class="ring" cx="100" cy="100" r="80"></circle>
+        <circle class="ring ring--inner" cx="100" cy="100" r="66"></circle>
+
+        <!-- Cardinal ticks, set in the gap between the two rings -->
+        <g class="ticks">
+          <line x1="100" y1="22" x2="100" y2="30"></line>
+          <line x1="100" y1="170" x2="100" y2="178"></line>
+          <line x1="22" y1="100" x2="30" y2="100"></line>
+          <line x1="170" y1="100" x2="178" y2="100"></line>
+        </g>
+
+        <!-- Needle -->
+        <polygon class="needle needle--n" points="100,62 110,100 100,106 90,100"></polygon>
+        <polygon class="needle needle--s" points="100,138 110,100 100,94 90,100"></polygon>
+        <circle class="hub" cx="100" cy="100" r="6"></circle>
+
+        <!-- Cardinal letters, inside the rings so nothing clips them -->
+        <text class="dir" x="100" y="51" text-anchor="middle" dominant-baseline="middle">N</text>
+        <text class="dir" x="100" y="149" text-anchor="middle" dominant-baseline="middle">S</text>
+        <text class="dir" x="149" y="100" text-anchor="middle" dominant-baseline="middle">E</text>
+        <text class="dir" x="51" y="100" text-anchor="middle" dominant-baseline="middle">W</text>
+      </svg>
+
+      <h1>404 | Page not found</h1>
+      <p>
+        Looks like you've wandered off the map. The page you're after may have moved, or it never
+        existed in the first place.
+      </p>
+
+      <nav class="links" aria-label="Get back on track">
+        <a href="/" class="btn btn--primary">Back home</a>
+        <a href="/contact" class="btn">Contact</a>
+      </nav>
     </div>
   </section>
 </Layout>
@@ -21,17 +59,104 @@ import Layout from "../layouts/Layout.astro";
   }
 
   .box {
+    max-width: 32rem;
     text-align: center;
     background-color: rgba(255, 255, 255, 0.75);
-    padding: 1rem;
+    padding: 2rem 1.5rem;
     border-radius: 10px;
   }
 
+  .compass {
+    width: 9rem;
+    height: 9rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .ring {
+    fill: none;
+    stroke: #333;
+    stroke-width: 3;
+  }
+
+  .ring--inner {
+    stroke-width: 1.5;
+    opacity: 0.4;
+  }
+
+  .ticks line {
+    stroke: #333;
+    stroke-width: 3;
+    stroke-linecap: round;
+    opacity: 0.6;
+  }
+
+  .needle--n {
+    fill: #333;
+  }
+
+  .needle--s {
+    fill: #bbb;
+  }
+
+  .hub {
+    fill: #fff;
+    stroke: #333;
+    stroke-width: 2;
+  }
+
+  .dir {
+    fill: #333;
+    font-size: 16px;
+    font-weight: 700;
+    font-family: inherit;
+  }
+
   h1 {
-    font-size: 3rem;
+    font-size: 2.25rem;
     font-weight: 600;
-    margin: 0;
+    margin: 0 0 0.5rem;
     text-shadow: 0.4px 0.8px 0.8px hsl(0deg 0% 0% / 0.15);
+  }
+
+  p {
+    margin: 0 auto 1.5rem;
+    max-width: 28rem;
+    line-height: 1.5;
+  }
+
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    justify-content: center;
+  }
+
+  .btn,
+  .btn:visited {
+    display: inline-block;
+    padding: 0.5rem 1.25rem;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    background-color: #f4f4f4;
+    color: #333;
+  }
+
+  .btn:hover {
+    text-decoration: none;
+    border-color: #666;
+    background-color: #e9e9e9;
+  }
+
+  .btn--primary,
+  .btn--primary:visited {
+    border-color: #333;
+    background-color: #333;
+    color: #f4f4f4;
+  }
+
+  .btn--primary:hover {
+    border-color: #000;
+    background-color: #222;
   }
 
   @media (min-width: 640px) {
