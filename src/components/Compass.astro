@@ -1,0 +1,137 @@
+---
+interface Props {
+  /** CSS length for the rendered width/height. Defaults to 10rem. */
+  size?: string;
+  /** Accessible label. Set to "" together with `decorative` to hide from a11y tree. */
+  label?: string;
+  /** Render as decorative (aria-hidden) instead of an img with a label. */
+  decorative?: boolean;
+  /** Extra class(es) merged onto the root <svg>. */
+  class?: string;
+}
+
+const {
+  size = "10rem",
+  label = "A compass, to help you find your way",
+  decorative = false,
+  class: className,
+} = Astro.props;
+
+// Unique id prefix so several compasses on one page don't share gradient ids.
+const uid = "compass-" + Math.random().toString(36).slice(2, 8);
+---
+
+<svg
+  class:list={["compass", className]}
+  style={`width:${size};height:${size};`}
+  viewBox="0 0 240 240"
+  xmlns="http://www.w3.org/2000/svg"
+  role={decorative ? undefined : "img"}
+  aria-hidden={decorative ? "true" : undefined}
+  aria-label={decorative ? undefined : label}
+>
+  <defs>
+    <radialGradient id={`${uid}-bezel`} cx="42%" cy="38%" r="68%">
+      <stop offset="0%" stop-color="#ececec"></stop>
+      <stop offset="55%" stop-color="#a9a9a9"></stop>
+      <stop offset="100%" stop-color="#555555"></stop>
+    </radialGradient>
+    <radialGradient id={`${uid}-hub`} cx="40%" cy="36%" r="70%">
+      <stop offset="0%" stop-color="#f5f5f5"></stop>
+      <stop offset="100%" stop-color="#777777"></stop>
+    </radialGradient>
+    <radialGradient id={`${uid}-face`} cx="44%" cy="40%" r="72%">
+      <stop offset="0%" stop-color="#fbfbfb"></stop>
+      <stop offset="70%" stop-color="#eeeeee"></stop>
+      <stop offset="100%" stop-color="#dadada"></stop>
+    </radialGradient>
+
+    <!-- One major (cardinal) star point, pointing north -->
+    <g id={`${uid}-major`}>
+      <polygon class="rose-dk" points="120,54 112,112 120,120"></polygon>
+      <polygon class="rose-lt" points="120,54 128,112 120,120"></polygon>
+    </g>
+    <!-- One minor (intercardinal) star point, pointing north -->
+    <g id={`${uid}-minor`}>
+      <polygon class="rose-dk" points="120,70 114,114 120,120"></polygon>
+      <polygon class="rose-lt" points="120,70 126,114 120,120"></polygon>
+    </g>
+  </defs>
+
+  <!-- Case -->
+  <circle cx="120" cy="120" r="110" fill={`url(#${uid}-bezel)`} stroke="#333" stroke-width="0.5"
+  ></circle>
+  <circle cx="120" cy="120" r="98" fill="none" stroke="#fff" stroke-width="1.5" opacity="0.6"
+  ></circle>
+  <circle cx="120" cy="120" r="93" fill="none" stroke="#333" stroke-width="3"></circle>
+
+  <!-- Dial face -->
+  <circle cx="120" cy="120" r="90" fill={`url(#${uid}-face)`} stroke="#666" stroke-width="1.5"
+  ></circle>
+  <!-- Degree ticks, with gaps left at the four cardinal letters -->
+  <g
+    class="ticks"
+    fill="none"
+    stroke="#555"
+    stroke-width="6"
+    stroke-dasharray="1 7.3"
+    opacity="0.5"
+  >
+    <path d="M202.7 134.6 A84 84 0 0 1 134.6 202.7"></path>
+    <path d="M105.4 202.7 A84 84 0 0 1 37.3 134.6"></path>
+    <path d="M37.3 105.4 A84 84 0 0 1 105.4 37.3"></path>
+    <path d="M134.6 37.3 A84 84 0 0 1 202.7 105.4"></path>
+  </g>
+
+  <!-- Compass rose -->
+  <g class="rose">
+    <use href={`#${uid}-minor`} transform="rotate(45 120 120)"></use>
+    <use href={`#${uid}-minor`} transform="rotate(135 120 120)"></use>
+    <use href={`#${uid}-minor`} transform="rotate(225 120 120)"></use>
+    <use href={`#${uid}-minor`} transform="rotate(315 120 120)"></use>
+    <use href={`#${uid}-major`}></use>
+    <use href={`#${uid}-major`} transform="rotate(90 120 120)"></use>
+    <use href={`#${uid}-major`} transform="rotate(180 120 120)"></use>
+    <use href={`#${uid}-major`} transform="rotate(270 120 120)"></use>
+  </g>
+
+  <!-- Cardinal letters -->
+  <g class="dir">
+    <text x="120" y="40" text-anchor="middle" dominant-baseline="middle">N</text>
+    <text x="120" y="200" text-anchor="middle" dominant-baseline="middle">S</text>
+    <text x="200" y="120" text-anchor="middle" dominant-baseline="middle">E</text>
+    <text x="40" y="120" text-anchor="middle" dominant-baseline="middle">W</text>
+  </g>
+
+  <!-- Needle -->
+  <polygon points="120,52 126,120 114,120" fill="#333"></polygon>
+  <polygon points="120,188 126,120 114,120" fill="#bbb"></polygon>
+
+  <!-- Hub -->
+  <circle cx="120" cy="120" r="10" fill={`url(#${uid}-hub)`} stroke="#333" stroke-width="1.5"
+  ></circle>
+  <circle cx="120" cy="120" r="3.5" fill="#444"></circle>
+</svg>
+
+<style>
+  .rose-dk {
+    fill: #333;
+  }
+
+  .rose-lt {
+    fill: #cfcfcf;
+  }
+
+  .rose-dk,
+  .rose-lt {
+    stroke: #222;
+    stroke-width: 0.4;
+  }
+
+  .dir text {
+    fill: #2a2a2a;
+    font-size: 16px;
+    font-weight: 700;
+    font-family: Georgia, "Times New Roman", serif;
+  }
+</style>
