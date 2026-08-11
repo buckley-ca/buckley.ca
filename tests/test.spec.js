@@ -144,22 +144,45 @@ const csp = cloudflareHeaders["Content-Security-Policy"];
 
 // Cloudflare (_headers) and Vercel (vercel.json) are separate files; keep them
 // in lockstep so a header changed in one host isn't forgotten in the other.
+// Compare the full header maps rather than a hand-listed subset — otherwise a
+// header added to one file and missing from the other slips through simply
+// because nobody remembered to add its name to the list here too.
 test("vercel.json security headers match public/_headers", () => {
   const vercelHeaders = parseVercelHeaders();
-  const securityHeaders = [
-    "Content-Security-Policy",
-    "X-Content-Type-Options",
-    "Referrer-Policy",
-    "X-Frame-Options",
-    "Permissions-Policy",
-    "Strict-Transport-Security",
-  ];
-  for (const key of securityHeaders) {
-    expect(cloudflareHeaders[key], `${key} present in public/_headers`).toBeTruthy();
-    expect(vercelHeaders[key], `${key} in vercel.json matches public/_headers`).toBe(
-      cloudflareHeaders[key],
-    );
-  }
+
+  // Guard the parsers themselves: an empty map would make the comparison below
+  // pass vacuously if either file's format ever changes.
+  expect(Object.keys(cloudflareHeaders).length).toBeGreaterThan(0);
+
+  expect(vercelHeaders).toEqual(cloudflareHeaders);
+});
+
+// The headers above are the ones that actually matter, so assert their content
+// rather than only that the two hosts agree on it — two identically-wrong files
+// would satisfy the drift check.
+test("security headers carry the expected hardening", () => {
+  expect(cloudflareHeaders["X-Content-Type-Options"]).toBe("nosniff");
+  expect(cloudflareHeaders["X-Frame-Options"]).toBe("DENY");
+  expect(cloudflareHeaders["Referrer-Policy"]).toBe("strict-origin-when-cross-origin");
+  expect(cloudflareHeaders["Cross-Origin-Opener-Policy"]).toBe("same-origin");
+
+  // At least a year, and covering subdomains.
+  const hsts = cloudflareHeaders["Strict-Transport-Security"];
+  expect(hsts).toMatch(/includeSubDomains/);
+  expect(Number(hsts.match(/max-age=(\d+)/)[1])).toBeGreaterThanOrEqual(31536000);
+
+  // script-src is the directive worth pinning: no 'unsafe-inline'/'unsafe-eval',
+  // no wildcard host. Everything else is intentionally permissive (see _headers).
+  const directives = Object.fromEntries(
+    cloudflareHeaders["Content-Security-Policy"]
+      .split(";")
+      .map((d) => d.trim().split(/\s+/))
+      .map(([name, ...values]) => [name, values]),
+  );
+  expect(directives["script-src"]).toEqual(["'self'"]);
+  expect(directives["object-src"]).toEqual(["'none'"]);
+  expect(directives["base-uri"]).toEqual(["'self'"]);
+  expect(directives["frame-ancestors"]).toEqual(["'none'"]);
 });
 
 for (const path of ["/", "/contact"]) {
