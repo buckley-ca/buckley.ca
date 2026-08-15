@@ -20,11 +20,26 @@
 #                         calls to a third-party API, widen this (the page-load
 #                         test can't catch runtime fetches).
 #   - form-action         the contact form posts to Formspree.
+#
+# Non-CSP notes:
+#   - HSTS includeSubDomains  every buckley.ca host is HTTPS-only. If a plain-HTTP
+#                         subdomain is ever needed, drop this token first — browsers
+#                         cache it for a year. `preload` is deliberately NOT set:
+#                         removal from the preload list is slow and manual.
+#   - Cross-Origin-Opener-Policy  severs window.opener between this page and any
+#                         cross-origin page that opens it (or that it opens),
+#                         closing tabnabbing and cross-window XS-Leaks. Safe here
+#                         because nothing on the site relies on popup messaging.
+#   Deliberately absent: Cross-Origin-Embedder-Policy (would block the Cloudinary
+#   background image) and Cross-Origin-Resource-Policy (would stop other origins
+#   from embedding /og.png, which is the whole point of a social card).
 
 /*
   Content-Security-Policy: default-src 'self'; img-src 'self' https: data:; style-src 'self' 'unsafe-inline' https:; script-src 'self'; font-src 'self' https: data:; connect-src 'self'; form-action 'self' https://formspree.io; frame-ancestors 'none'; base-uri 'self'; object-src 'none'; upgrade-insecure-requests
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   X-Frame-Options: DENY
-  Permissions-Policy: accelerometer=(), autoplay=(), camera=(), display-capture=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()
-  Strict-Transport-Security: max-age=31536000
+  Permissions-Policy: accelerometer=(), autoplay=(), browsing-topics=(), camera=(), display-capture=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
+  Cross-Origin-Opener-Policy: same-origin
+  X-Permitted-Cross-Domain-Policies: none
