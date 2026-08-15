@@ -13,9 +13,14 @@
         { "key": "X-Frame-Options", "value": "DENY" },
         {
           "key": "Permissions-Policy",
-          "value": "accelerometer=(), autoplay=(), camera=(), display-capture=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()"
+          "value": "accelerometer=(), autoplay=(), browsing-topics=(), camera=(), display-capture=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()"
         },
-        { "key": "Strict-Transport-Security", "value": "max-age=31536000" }
+        {
+          "key": "Strict-Transport-Security",
+          "value": "max-age=31536000; includeSubDomains"
+        },
+        { "key": "Cross-Origin-Opener-Policy", "value": "same-origin" },
+        { "key": "X-Permitted-Cross-Domain-Policies", "value": "none" }
       ]
     }
   ]

@@ -9,3 +9,10 @@ updates:
     directory: "/" # Location of package manifests
     schedule:
       interval: "weekly"
+
+  # Workflow actions were previously unmanaged: a vulnerable or compromised
+  # action version could sit pinned in .github/workflows indefinitely.
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
