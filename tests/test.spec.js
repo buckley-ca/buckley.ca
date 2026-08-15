@@ -166,10 +166,13 @@ test("security headers carry the expected hardening", () => {
   expect(cloudflareHeaders["Referrer-Policy"]).toBe("strict-origin-when-cross-origin");
   expect(cloudflareHeaders["Cross-Origin-Opener-Policy"]).toBe("same-origin");
 
-  // At least a year, and covering subdomains.
+  // At least a year. `includeSubDomains` and `preload` are deliberately absent
+  // (see public/_headers) — assert that rather than just omitting the check, so
+  // adding either is a conscious edit here and not a silent one-way commitment.
   const hsts = cloudflareHeaders["Strict-Transport-Security"];
-  expect(hsts).toMatch(/includeSubDomains/);
   expect(Number(hsts.match(/max-age=(\d+)/)[1])).toBeGreaterThanOrEqual(31536000);
+  expect(hsts).not.toMatch(/includeSubDomains/);
+  expect(hsts).not.toMatch(/preload/);
 
   // script-src is the directive worth pinning: no 'unsafe-inline'/'unsafe-eval',
   // no wildcard host. Everything else is intentionally permissive (see _headers).
