@@ -22,14 +22,18 @@
 #   - form-action         the contact form posts to Formspree.
 #
 # Non-CSP notes:
-#   - HSTS                max-age only. Neither `includeSubDomains` nor `preload`
-#                         is set, deliberately: both are effectively one-way for a
-#                         year or more once a browser has seen them, and the apex
-#                         has Google Workspace subdomains (email, admin, docs, …)
-#                         hanging off it. The scope is narrow either way — this
-#                         header ships from www, so includeSubDomains would cover
-#                         *.www.buckley.ca, not those siblings — but the upside
-#                         didn't justify a commitment that can't be taken back.
+#   - HSTS                Cloudflare injects its own HSTS at the edge (dashboard:
+#                         SSL/TLS -> Edge Certificates -> HSTS) as
+#                         `max-age=2592000; includeSubDomains; preload`, and that
+#                         edge value overrides whatever this file sets. Rather than
+#                         serve one value here and a different one live, we mirror
+#                         Cloudflare's default so this file, vercel.json, and the
+#                         live response all agree (the test below enforces it). The
+#                         scope stays narrow: this header ships from www, so
+#                         includeSubDomains covers *.www.buckley.ca, not the apex's
+#                         Google Workspace siblings (email, admin, docs, …). Note
+#                         `preload` here only advertises eligibility; it does not
+#                         submit the domain to the preload list.
 #   - Cross-Origin-Opener-Policy  severs window.opener between this page and any
 #                         cross-origin page that opens it (or that it opens),
 #                         closing tabnabbing and cross-window XS-Leaks. Safe here
@@ -44,6 +48,6 @@
   Referrer-Policy: strict-origin-when-cross-origin
   X-Frame-Options: DENY
   Permissions-Policy: accelerometer=(), autoplay=(), browsing-topics=(), camera=(), display-capture=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()
-  Strict-Transport-Security: max-age=31536000
+  Strict-Transport-Security: max-age=2592000; includeSubDomains; preload
   Cross-Origin-Opener-Policy: same-origin
   X-Permitted-Cross-Domain-Policies: none

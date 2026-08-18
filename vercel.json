@@ -17,7 +17,7 @@
         },
         {
           "key": "Strict-Transport-Security",
-          "value": "max-age=31536000"
+          "value": "max-age=2592000; includeSubDomains; preload"
         },
         { "key": "Cross-Origin-Opener-Policy", "value": "same-origin" },
         { "key": "X-Permitted-Cross-Domain-Policies", "value": "none" }
