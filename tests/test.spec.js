@@ -166,13 +166,14 @@ test("security headers carry the expected hardening", () => {
   expect(cloudflareHeaders["Referrer-Policy"]).toBe("strict-origin-when-cross-origin");
   expect(cloudflareHeaders["Cross-Origin-Opener-Policy"]).toBe("same-origin");
 
-  // At least a year. `includeSubDomains` and `preload` are deliberately absent
-  // (see public/_headers) — assert that rather than just omitting the check, so
-  // adding either is a conscious edit here and not a silent one-way commitment.
+  // Mirror Cloudflare's edge-injected HSTS (see public/_headers): Cloudflare's
+  // dashboard HSTS overrides this file live, so the repo tracks its value rather
+  // than a value that never ships. `includeSubDomains` and `preload` are part of
+  // that default; assert them so dropping either is a conscious edit here.
   const hsts = cloudflareHeaders["Strict-Transport-Security"];
-  expect(Number(hsts.match(/max-age=(\d+)/)[1])).toBeGreaterThanOrEqual(31536000);
-  expect(hsts).not.toMatch(/includeSubDomains/);
-  expect(hsts).not.toMatch(/preload/);
+  expect(Number(hsts.match(/max-age=(\d+)/)[1])).toBeGreaterThanOrEqual(2592000);
+  expect(hsts).toMatch(/includeSubDomains/);
+  expect(hsts).toMatch(/preload/);
 
   // script-src is the directive worth pinning: no 'unsafe-inline'/'unsafe-eval',
   // no wildcard host. Everything else is intentionally permissive (see _headers).
