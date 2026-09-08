@@ -79,8 +79,12 @@ test("sitemap.xml is a flat urlset listing site pages", async ({ request }) => {
   const body = await res.text();
   expect(body).toContain("<urlset");
   expect(body).not.toContain("<sitemapindex");
-  expect(body).toContain("<loc>https://buckley.ca</loc>");
-  expect(body).toContain("<loc>https://buckley.ca/contact</loc>");
+  // Compare the <loc>s as URLs, not as strings: @astrojs/sitemap emits the home
+  // entry as a bare origin on Node 22 and with a trailing slash on Node 24 (the
+  // version this repo requires), and both name the same page. Normalizing
+  // through the URL parser keeps the assertion about *which* pages are listed.
+  const locs = [...body.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => new URL(m[1]).href);
+  expect(locs).toEqual(["https://buckley.ca/", "https://buckley.ca/contact"]);
 });
 
 // The site publishes slashless, extensionless URLs (canonical tag, sitemap,
