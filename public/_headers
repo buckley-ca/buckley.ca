@@ -28,12 +28,16 @@
 #                         edge value overrides whatever this file sets. Rather than
 #                         serve one value here and a different one live, we mirror
 #                         Cloudflare's default so this file, vercel.json, and the
-#                         live response all agree (the test below enforces it). The
-#                         scope stays narrow: this header ships from www, so
-#                         includeSubDomains covers *.www.buckley.ca, not the apex's
-#                         Google Workspace siblings (email, admin, docs, …). Note
-#                         `preload` here only advertises eligibility; it does not
-#                         submit the domain to the preload list.
+#                         live response all agree (the test below enforces it).
+#                         Note the scope: pages are served from the apex
+#                         (www 301s to buckley.ca), so includeSubDomains covers
+#                         every *.buckley.ca host — the Google Workspace siblings
+#                         (email, admin, docs, …) included. Those all speak HTTPS,
+#                         and Cloudflare's edge injects this same value regardless
+#                         of what ships here, so the scope is a fact to know rather
+#                         than a knob this file turns. `preload` only advertises
+#                         eligibility; it does not submit the domain to the
+#                         preload list.
 #   - Cross-Origin-Opener-Policy  severs window.opener between this page and any
 #                         cross-origin page that opens it (or that it opens),
 #                         closing tabnabbing and cross-window XS-Leaks. Safe here

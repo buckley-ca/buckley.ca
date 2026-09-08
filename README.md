@@ -1,6 +1,6 @@
 # buckley.ca
 
-The official homepage of [buckley.ca](https://www.buckley.ca) — a small static
+The official homepage of [buckley.ca](https://buckley.ca) — a small static
 site built with [Astro](https://astro.build).
 
 ## Developing

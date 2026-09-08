@@ -1,5 +1,6 @@
 ---
 import Header from "../components/Header.astro";
+import { routePath } from "../lib/route-path.js";
 import "../styles/global.css";
 
 interface Props {
@@ -9,7 +10,7 @@ interface Props {
 
 const { title, description = title } = Astro.props;
 
-const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const canonical = new URL(routePath(Astro.url.pathname), Astro.site).href;
 // Purpose-built 1200x630 social card (the de-facto Open Graph size): the
 // buckley.ca logo and wordmark. Served from /public so og:image:width/height
 // are accurate and there's no external dependency. See scripts/og-card.html.

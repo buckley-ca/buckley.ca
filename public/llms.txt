@@ -8,9 +8,9 @@ application — it is a personal landing site.
 
 ## Pages
 
-- [Home](https://www.buckley.ca/): Landing page showing the buckley.ca logo.
-- [Contact](https://www.buckley.ca/contact): A form to reach Sean Buckley by email.
+- [Home](https://buckley.ca/): Landing page showing the buckley.ca logo.
+- [Contact](https://buckley.ca/contact): A form to reach Sean Buckley by email.
 
 ## Contact
 
-- To get in touch, use the contact form at https://www.buckley.ca/contact.
+- To get in touch, use the contact form at https://buckley.ca/contact.

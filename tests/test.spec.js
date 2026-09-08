@@ -1,5 +1,6 @@
 import { expect, test } from "@playwright/test";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
+import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 // --- Structural assertions (primary gate, deterministic) ---
@@ -78,23 +79,47 @@ test("sitemap.xml is a flat urlset listing site pages", async ({ request }) => {
   const body = await res.text();
   expect(body).toContain("<urlset");
   expect(body).not.toContain("<sitemapindex");
-  expect(body).toContain("<loc>https://www.buckley.ca</loc>");
-  expect(body).toContain("<loc>https://www.buckley.ca/contact</loc>");
+  expect(body).toContain("<loc>https://buckley.ca</loc>");
+  expect(body).toContain("<loc>https://buckley.ca/contact</loc>");
 });
+
+// The site publishes slashless, extensionless URLs (canonical tag, sitemap,
+// llms.txt, nav). Cloudflare Pages redirects a directory route's slashless URL
+// to its trailing-slash form, so `build.format: "file"` is what keeps those
+// published URLs from being redirects — which is exactly what Search Console
+// flagged. Assert the built output stays flat.
+test("pages build as flat files, not directories", () => {
+  const dist = fileURLToPath(new URL("../dist", import.meta.url));
+  expect(existsSync(join(dist, "contact.html"))).toBeTruthy();
+  expect(existsSync(join(dist, "contact", "index.html"))).toBeFalsy();
+});
+
+// Canonical URLs must name the host that actually serves 200s: www.buckley.ca
+// 301s to the apex, so publishing www URLs made every canonical a redirect.
+for (const [path, canonical] of [
+  ["/", "https://buckley.ca/"],
+  ["/contact", "https://buckley.ca/contact"],
+]) {
+  test(`canonical URL on ${path} is the apex, extensionless`, async ({ page }) => {
+    await page.goto(path);
+    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", canonical);
+    await expect(page.locator('meta[property="og:url"]')).toHaveAttribute("content", canonical);
+  });
+}
 
 test("llms.txt is served and describes the site", async ({ request }) => {
   const res = await request.get("/llms.txt");
   expect(res.ok()).toBeTruthy();
   const body = await res.text();
   expect(body).toContain("# buckley.ca");
-  expect(body).toContain("https://www.buckley.ca/contact");
+  expect(body).toContain("https://buckley.ca/contact");
 });
 
 test("home page has og:image with alt and dimensions", async ({ page }) => {
   await page.goto("/");
   await expect(page.locator('meta[property="og:image"]')).toHaveAttribute(
     "content",
-    "https://www.buckley.ca/og.png",
+    "https://buckley.ca/og.png",
   );
   await expect(page.locator('meta[property="og:image:width"]')).toHaveAttribute("content", "1200");
   await expect(page.locator('meta[property="og:image:height"]')).toHaveAttribute("content", "630");
