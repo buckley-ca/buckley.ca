@@ -1,6 +1,9 @@
 ---
-// Normalize trailing slash — some hosts add one even with trailingSlash: 'never'
-const path = Astro.url.pathname.replace(/\/$/, "") || "/";
+import { routePath } from "../lib/route-path.js";
+
+// Astro.url.pathname is the built filename (/contact.html) under
+// build.format: "file", and hosts may add a trailing slash at runtime.
+const path = routePath(Astro.url.pathname);
 ---
 
 <header>
