@@ -59,14 +59,33 @@ const uid = "compass-" + Math.random().toString(36).slice(2, 8);
   </defs>
 
   <!-- Case -->
-  <circle cx="120" cy="120" r="110" fill={`url(#${uid}-bezel)`} stroke="#333" stroke-width="0.5"
+  <circle
+    cx="120"
+    cy="120"
+    r="110"
+    fill={`url(#${uid}-bezel)`}
+    stroke="#333"
+    stroke-width="0.5"
   ></circle>
-  <circle cx="120" cy="120" r="98" fill="none" stroke="#fff" stroke-width="1.5" opacity="0.6"
+  <circle
+    cx="120"
+    cy="120"
+    r="98"
+    fill="none"
+    stroke="#fff"
+    stroke-width="1.5"
+    opacity="0.6"
   ></circle>
   <circle cx="120" cy="120" r="93" fill="none" stroke="#333" stroke-width="3"></circle>
 
   <!-- Dial face -->
-  <circle cx="120" cy="120" r="90" fill={`url(#${uid}-face)`} stroke="#666" stroke-width="1.5"
+  <circle
+    cx="120"
+    cy="120"
+    r="90"
+    fill={`url(#${uid}-face)`}
+    stroke="#666"
+    stroke-width="1.5"
   ></circle>
   <!-- Degree ticks, with gaps left at the four cardinal letters -->
   <g
@@ -97,10 +116,18 @@ const uid = "compass-" + Math.random().toString(36).slice(2, 8);
 
   <!-- Cardinal letters -->
   <g class="dir">
-    <text x="120" y="40" text-anchor="middle" dominant-baseline="middle">N</text>
-    <text x="120" y="200" text-anchor="middle" dominant-baseline="middle">S</text>
-    <text x="200" y="120" text-anchor="middle" dominant-baseline="middle">E</text>
-    <text x="40" y="120" text-anchor="middle" dominant-baseline="middle">W</text>
+    <text x="120" y="40" text-anchor="middle" dominant-baseline="middle">
+      N
+    </text>
+    <text x="120" y="200" text-anchor="middle" dominant-baseline="middle">
+      S
+    </text>
+    <text x="200" y="120" text-anchor="middle" dominant-baseline="middle">
+      E
+    </text>
+    <text x="40" y="120" text-anchor="middle" dominant-baseline="middle">
+      W
+    </text>
   </g>
 
   <!-- Needle -->
@@ -108,7 +135,13 @@ const uid = "compass-" + Math.random().toString(36).slice(2, 8);
   <polygon points="120,188 126,120 114,120" fill="#bbb"></polygon>
 
   <!-- Hub -->
-  <circle cx="120" cy="120" r="10" fill={`url(#${uid}-hub)`} stroke="#333" stroke-width="1.5"
+  <circle
+    cx="120"
+    cy="120"
+    r="10"
+    fill={`url(#${uid}-hub)`}
+    stroke="#333"
+    stroke-width="1.5"
   ></circle>
   <circle cx="120" cy="120" r="3.5" fill="#444"></circle>
 </svg>
