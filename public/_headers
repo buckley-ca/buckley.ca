@@ -8,27 +8,39 @@
 # Content-Security-Policy philosophy: lock down the high-risk directive
 # (script-src) and stay permissive on the directives that commonly change as the
 # site grows, so adding pages/images/fonts/styles doesn't silently break.
-#   - script-src 'self'   only first-party JS runs. Astro bundles framework
-#                         islands (React/Svelte/etc.) as same-origin module
-#                         scripts, so 'self' already covers them. A *third-party*
-#                         script (analytics, a CDN) would need its origin added
-#                         here — and tests/test.spec.js will fail loudly if a page
-#                         ever loads something this policy blocks.
+#   - script-src          first-party JS plus Cloudflare Web Analytics. Astro
+#                         bundles framework islands (React/Svelte/etc.) as
+#                         same-origin module scripts, so 'self' already covers
+#                         them. static.cloudflareinsights.com is the beacon
+#                         Cloudflare *injects at the edge* on Pages projects with
+#                         Web Analytics enabled: it isn't in this repo, but it
+#                         runs on every page, so the policy has to name it or the
+#                         browser blocks it and logs a console error (which is
+#                         what PageSpeed Insights flagged). Any other third-party
+#                         script would likewise need its origin added here — and
+#                         tests/test.spec.js will fail loudly if a page ever loads
+#                         something this policy blocks.
 #   - img/style/font      allow any https: source (+ data:) so new images, web
 #                         fonts, or inline styles Just Work.
-#   - connect-src 'self'  same-origin fetch/XHR only. If you add client-side
-#                         calls to a third-party API, widen this (the page-load
-#                         test can't catch runtime fetches).
+#   - connect-src         same-origin fetch/XHR, plus cloudflareinsights.com —
+#                         where the beacon above POSTs its pageview. If you add
+#                         client-side calls to a third-party API, widen this (the
+#                         page-load test can't catch runtime fetches).
 #   - form-action         the contact form posts to Formspree.
 #
 # Non-CSP notes:
 #   - HSTS                Cloudflare injects its own HSTS at the edge (dashboard:
-#                         SSL/TLS -> Edge Certificates -> HSTS) as
-#                         `max-age=2592000; includeSubDomains; preload`, and that
-#                         edge value overrides whatever this file sets. Rather than
-#                         serve one value here and a different one live, we mirror
-#                         Cloudflare's default so this file, vercel.json, and the
-#                         live response all agree (the test below enforces it).
+#                         SSL/TLS -> Edge Certificates -> HSTS), and that edge
+#                         value overrides whatever this file sets. This file, the
+#                         dashboard, and vercel.json must therefore all carry the
+#                         same value (the test below enforces the repo half).
+#                         That value is one year: 30 days (Cloudflare's dashboard
+#                         default) leaves a device that hasn't visited in a month
+#                         open to one SSL-strip attempt on its next plain-HTTP
+#                         request, and the preload list this header advertises
+#                         requires max-age >= 31536000 to accept a domain at all.
+#                         *** Setting max-age here alone does nothing: set
+#                         Cloudflare's dashboard HSTS to 12 months to match. ***
 #                         Note the scope: pages are served from the apex
 #                         (www 301s to buckley.ca), so includeSubDomains covers
 #                         every *.buckley.ca host — the Google Workspace siblings
@@ -47,11 +59,11 @@
 #   from embedding /og.png, which is the whole point of a social card).
 
 /*
-  Content-Security-Policy: default-src 'self'; img-src 'self' https: data:; style-src 'self' 'unsafe-inline' https:; script-src 'self'; font-src 'self' https: data:; connect-src 'self'; form-action 'self' https://formspree.io; frame-ancestors 'none'; base-uri 'self'; object-src 'none'; upgrade-insecure-requests
+  Content-Security-Policy: default-src 'self'; img-src 'self' https: data:; style-src 'self' 'unsafe-inline' https:; script-src 'self' https://static.cloudflareinsights.com; font-src 'self' https: data:; connect-src 'self' https://cloudflareinsights.com; form-action 'self' https://formspree.io; frame-ancestors 'none'; base-uri 'self'; object-src 'none'; upgrade-insecure-requests
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   X-Frame-Options: DENY
   Permissions-Policy: accelerometer=(), autoplay=(), browsing-topics=(), camera=(), display-capture=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()
-  Strict-Transport-Security: max-age=2592000; includeSubDomains; preload
+  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
   Cross-Origin-Opener-Policy: same-origin
   X-Permitted-Cross-Domain-Policies: none
