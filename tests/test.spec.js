@@ -199,12 +199,13 @@ test("security headers carry the expected hardening", () => {
   // dashboard HSTS overrides this file live, so the repo tracks its value rather
   // than a value that never ships. `includeSubDomains` and `preload` are part of
   // that default; assert them so dropping either is a conscious edit here.
-  // One year is both the preload list's minimum and what this header's own
-  // `preload` token claims to be eligible for, so anything shorter is a false
-  // advertisement. Cloudflare's edge overrides this value live — keep the
-  // dashboard's HSTS (SSL/TLS -> Edge Certificates) at 12 months to match.
+  // Six months (15768000) — Cloudflare's recommended setting, and what the
+  // dashboard is configured to inject. The edge value overrides this file, so
+  // the two must agree: if the dashboard's HSTS (SSL/TLS -> Edge Certificates)
+  // ever moves, move this with it. Floor, not equality, so raising the duration
+  // (e.g. to one year for preload-list eligibility) doesn't fail the suite.
   const hsts = cloudflareHeaders["Strict-Transport-Security"];
-  expect(Number(hsts.match(/max-age=(\d+)/)[1])).toBeGreaterThanOrEqual(31536000);
+  expect(Number(hsts.match(/max-age=(\d+)/)[1])).toBeGreaterThanOrEqual(15768000);
   expect(hsts).toMatch(/includeSubDomains/);
   expect(hsts).toMatch(/preload/);
 

@@ -34,13 +34,19 @@
 #                         value overrides whatever this file sets. This file, the
 #                         dashboard, and vercel.json must therefore all carry the
 #                         same value (the test below enforces the repo half).
-#                         That value is one year: 30 days (Cloudflare's dashboard
-#                         default) leaves a device that hasn't visited in a month
-#                         open to one SSL-strip attempt on its next plain-HTTP
-#                         request, and the preload list this header advertises
-#                         requires max-age >= 31536000 to accept a domain at all.
+#                         That value is six months (15768000), Cloudflare's own
+#                         recommended setting. It replaces the 30-day dashboard
+#                         default, which left a device that hadn't visited in a
+#                         month open to one SSL-strip attempt on its next
+#                         plain-HTTP request. The `preload` token below is
+#                         aspirational at this max-age: the HSTS preload list
+#                         only accepts a domain at max-age >= 31536000 (one
+#                         year), so actually submitting buckley.ca would mean
+#                         raising this first. The token stays regardless because
+#                         Cloudflare's Preload toggle is on and the edge emits it
+#                         either way — this file mirrors what ships.
 #                         *** Setting max-age here alone does nothing: set
-#                         Cloudflare's dashboard HSTS to 12 months to match. ***
+#                         Cloudflare's dashboard HSTS to 6 months to match. ***
 #                         Note the scope: pages are served from the apex
 #                         (www 301s to buckley.ca), so includeSubDomains covers
 #                         every *.buckley.ca host — the Google Workspace siblings
@@ -64,6 +70,6 @@
   Referrer-Policy: strict-origin-when-cross-origin
   X-Frame-Options: DENY
   Permissions-Policy: accelerometer=(), autoplay=(), browsing-topics=(), camera=(), display-capture=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()
-  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+  Strict-Transport-Security: max-age=15768000; includeSubDomains; preload
   Cross-Origin-Opener-Policy: same-origin
   X-Permitted-Cross-Domain-Policies: none
