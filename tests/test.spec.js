@@ -199,8 +199,13 @@ test("security headers carry the expected hardening", () => {
   // dashboard HSTS overrides this file live, so the repo tracks its value rather
   // than a value that never ships. `includeSubDomains` and `preload` are part of
   // that default; assert them so dropping either is a conscious edit here.
+  // Six months (15768000) — Cloudflare's recommended setting, and what the
+  // dashboard is configured to inject. The edge value overrides this file, so
+  // the two must agree: if the dashboard's HSTS (SSL/TLS -> Edge Certificates)
+  // ever moves, move this with it. Floor, not equality, so raising the duration
+  // (e.g. to one year for preload-list eligibility) doesn't fail the suite.
   const hsts = cloudflareHeaders["Strict-Transport-Security"];
-  expect(Number(hsts.match(/max-age=(\d+)/)[1])).toBeGreaterThanOrEqual(2592000);
+  expect(Number(hsts.match(/max-age=(\d+)/)[1])).toBeGreaterThanOrEqual(15768000);
   expect(hsts).toMatch(/includeSubDomains/);
   expect(hsts).toMatch(/preload/);
 
@@ -212,7 +217,13 @@ test("security headers carry the expected hardening", () => {
       .map((d) => d.trim().split(/\s+/))
       .map(([name, ...values]) => [name, values]),
   );
-  expect(directives["script-src"]).toEqual(["'self'"]);
+  // script-src may name explicit third-party origins (Cloudflare's edge-injected
+  // Web Analytics beacon), but never 'unsafe-inline', 'unsafe-eval' or a wildcard.
+  expect(directives["script-src"]).toEqual(["'self'", "https://static.cloudflareinsights.com"]);
+  for (const value of directives["script-src"]) {
+    expect(value).not.toMatch(/unsafe-inline|unsafe-eval|^\*|^https?:$/);
+  }
+  expect(directives["connect-src"]).toEqual(["'self'", "https://cloudflareinsights.com"]);
   expect(directives["object-src"]).toEqual(["'none'"]);
   expect(directives["base-uri"]).toEqual(["'self'"]);
   expect(directives["frame-ancestors"]).toEqual(["'none'"]);
