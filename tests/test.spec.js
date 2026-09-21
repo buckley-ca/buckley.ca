@@ -2,6 +2,7 @@ import { expect, test } from "@playwright/test";
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { BACKGROUND_DESKTOP, BACKGROUND_MOBILE, BACKGROUND_ORIGIN } from "../src/lib/background.js";
 
 // --- Structural assertions (primary gate, deterministic) ---
 
@@ -139,37 +140,47 @@ test("home page has og:image with alt and dimensions", async ({ page }) => {
 // if the browser reports any violation — i.e. if the site ever loads a resource
 // the policy doesn't allow (a new third-party script, font, image host, etc.),
 // CI goes red at PR time instead of the site silently breaking in production.
-// Parse the `/*` rule of public/_headers into a { header: value } map.
+// Parse public/_headers into { "<path pattern>": { header: value } }. Keying by
+// path (not one flat map) matters now that different paths carry different
+// Cache-Control values — a flat map would let the last rule win and hide a
+// mismatch between the two hosts.
 function parseCloudflareHeaders() {
   const text = readFileSync(fileURLToPath(new URL("../public/_headers", import.meta.url)), "utf8");
   const map = {};
-  let inRule = false;
+  let path = null;
   for (const line of text.split("\n")) {
+    if (line.startsWith("#")) continue;
     if (line.startsWith("/")) {
-      inRule = true;
+      path = line.trim();
+      map[path] ??= {};
       continue;
     }
-    if (!inRule) continue;
+    if (!path) continue;
     const m = line.match(/^\s+([A-Za-z-]+):\s*(.+)$/);
-    if (m) map[m[1]] = m[2].trim();
+    if (m) map[path][m[1]] = m[2].trim();
   }
   return map;
 }
 
-// Flatten vercel.json's headers config into the same { header: value } map.
+// Flatten vercel.json's headers config into the same shape. Vercel matches with
+// a regex (`/(.*)`) where Cloudflare uses a glob (`/*`); normalize to the glob
+// so the two are comparable.
 function parseVercelHeaders() {
   const json = JSON.parse(
     readFileSync(fileURLToPath(new URL("../vercel.json", import.meta.url)), "utf8"),
   );
   const map = {};
   for (const rule of json.headers ?? []) {
-    for (const h of rule.headers ?? []) map[h.key] = h.value.trim();
+    const path = rule.source.replace(/\(\.\*\)/g, "*");
+    map[path] ??= {};
+    for (const h of rule.headers ?? []) map[path][h.key] = h.value.trim();
   }
   return map;
 }
 
 const cloudflareHeaders = parseCloudflareHeaders();
-const csp = cloudflareHeaders["Content-Security-Policy"];
+const siteHeaders = cloudflareHeaders["/*"];
+const csp = siteHeaders["Content-Security-Policy"];
 
 // Cloudflare (_headers) and Vercel (vercel.json) are separate files; keep them
 // in lockstep so a header changed in one host isn't forgotten in the other.
@@ -182,6 +193,7 @@ test("vercel.json security headers match public/_headers", () => {
   // Guard the parsers themselves: an empty map would make the comparison below
   // pass vacuously if either file's format ever changes.
   expect(Object.keys(cloudflareHeaders).length).toBeGreaterThan(0);
+  expect(Object.keys(siteHeaders).length).toBeGreaterThan(0);
 
   expect(vercelHeaders).toEqual(cloudflareHeaders);
 });
@@ -190,10 +202,10 @@ test("vercel.json security headers match public/_headers", () => {
 // rather than only that the two hosts agree on it — two identically-wrong files
 // would satisfy the drift check.
 test("security headers carry the expected hardening", () => {
-  expect(cloudflareHeaders["X-Content-Type-Options"]).toBe("nosniff");
-  expect(cloudflareHeaders["X-Frame-Options"]).toBe("DENY");
-  expect(cloudflareHeaders["Referrer-Policy"]).toBe("strict-origin-when-cross-origin");
-  expect(cloudflareHeaders["Cross-Origin-Opener-Policy"]).toBe("same-origin");
+  expect(siteHeaders["X-Content-Type-Options"]).toBe("nosniff");
+  expect(siteHeaders["X-Frame-Options"]).toBe("DENY");
+  expect(siteHeaders["Referrer-Policy"]).toBe("strict-origin-when-cross-origin");
+  expect(siteHeaders["Cross-Origin-Opener-Policy"]).toBe("same-origin");
 
   // Mirror Cloudflare's edge-injected HSTS (see public/_headers): Cloudflare's
   // dashboard HSTS overrides this file live, so the repo tracks its value rather
@@ -204,7 +216,7 @@ test("security headers carry the expected hardening", () => {
   // the two must agree: if the dashboard's HSTS (SSL/TLS -> Edge Certificates)
   // ever moves, move this with it. Floor, not equality, so raising the duration
   // (e.g. to one year for preload-list eligibility) doesn't fail the suite.
-  const hsts = cloudflareHeaders["Strict-Transport-Security"];
+  const hsts = siteHeaders["Strict-Transport-Security"];
   expect(Number(hsts.match(/max-age=(\d+)/)[1])).toBeGreaterThanOrEqual(15768000);
   expect(hsts).toMatch(/includeSubDomains/);
   expect(hsts).toMatch(/preload/);
@@ -212,7 +224,7 @@ test("security headers carry the expected hardening", () => {
   // script-src is the directive worth pinning: no 'unsafe-inline'/'unsafe-eval',
   // no wildcard host. Everything else is intentionally permissive (see _headers).
   const directives = Object.fromEntries(
-    cloudflareHeaders["Content-Security-Policy"]
+    siteHeaders["Content-Security-Policy"]
       .split(";")
       .map((d) => d.trim().split(/\s+/))
       .map(([name, ...values]) => [name, values]),
@@ -228,6 +240,52 @@ test("security headers carry the expected hardening", () => {
   expect(directives["base-uri"]).toEqual(["'self'"]);
   expect(directives["frame-ancestors"]).toEqual(["'none'"]);
 });
+
+// --- LCP preload ---
+// The Cloudinary background is the LCP element and lives only in CSS, so the
+// browser can't discover it from the HTML. Layout.astro preloads it at high
+// priority; these assert the preload is there and — crucially — that the URL it
+// names is byte-identical to the one the CSS paints. A mismatch wouldn't fail
+// visibly, it would just download the background twice, which is worse than not
+// preloading at all.
+for (const path of ["/", "/contact"]) {
+  test(`${path} preloads the background at high priority`, async ({ page }) => {
+    await page.goto(path);
+
+    const mobile = page.locator('link[rel="preload"][media*="max-width"]');
+    const desktop = page.locator('link[rel="preload"][media*="min-width"]');
+
+    for (const link of [mobile, desktop]) {
+      await expect(link).toHaveAttribute("as", "image");
+      await expect(link).toHaveAttribute("fetchpriority", "high");
+    }
+
+    await expect(mobile).toHaveAttribute("href", BACKGROUND_MOBILE);
+    await expect(desktop).toHaveAttribute("href", BACKGROUND_DESKTOP);
+
+    await expect(page.locator(`link[rel="preconnect"][href="${BACKGROUND_ORIGIN}"]`)).toHaveCount(
+      1,
+    );
+  });
+
+  test(`${path} paints exactly the background URLs it preloads`, async ({ page }) => {
+    await page.goto(path);
+
+    // Layout.astro defines the two URLs once as :root custom properties, which
+    // is what the .background rule resolves. Reading them back proves the CSS
+    // and the preloads share one source of truth.
+    const vars = await page.evaluate(() => {
+      const style = getComputedStyle(document.documentElement);
+      return {
+        mobile: style.getPropertyValue("--background-mobile").trim(),
+        desktop: style.getPropertyValue("--background-desktop").trim(),
+      };
+    });
+
+    expect(vars.mobile).toContain(BACKGROUND_MOBILE);
+    expect(vars.desktop).toContain(BACKGROUND_DESKTOP);
+  });
+}
 
 for (const path of ["/", "/contact"]) {
   test(`no CSP violations on ${path}`, async ({ page }) => {

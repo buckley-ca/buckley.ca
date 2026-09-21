@@ -63,6 +63,15 @@
 #   Deliberately absent: Cross-Origin-Embedder-Policy (would block the Cloudinary
 #   background image) and Cross-Origin-Resource-Policy (would stop other origins
 #   from embedding /og.png, which is the whole point of a social card).
+#
+# Caching: Cloudflare Pages serves everything with a short, revalidating
+# Cache-Control by default, which is what PageSpeed's "Use efficient cache
+# lifetimes" audit flags. /favicon.png and /og.png are stable URLs whose
+# contents can still change, so they get a week rather than a year: long enough
+# to stop the repeat-visit refetch the audit flags, short enough that replacing
+# either one reaches visitors quickly. HTML stays on the default (revalidate
+# every navigation) so a deploy is live immediately. There are no hashed asset
+# filenames to cache forever — this build inlines all its CSS and ships no JS.
 
 /*
   Content-Security-Policy: default-src 'self'; img-src 'self' https: data:; style-src 'self' 'unsafe-inline' https:; script-src 'self' https://static.cloudflareinsights.com; font-src 'self' https: data:; connect-src 'self' https://cloudflareinsights.com; form-action 'self' https://formspree.io; frame-ancestors 'none'; base-uri 'self'; object-src 'none'; upgrade-insecure-requests
@@ -73,3 +82,9 @@
   Strict-Transport-Security: max-age=15768000; includeSubDomains; preload
   Cross-Origin-Opener-Policy: same-origin
   X-Permitted-Cross-Domain-Policies: none
+
+/favicon.png
+  Cache-Control: public, max-age=604800
+
+/og.png
+  Cache-Control: public, max-age=604800
