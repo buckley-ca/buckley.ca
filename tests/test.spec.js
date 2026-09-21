@@ -2,7 +2,13 @@ import { expect, test } from "@playwright/test";
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { BACKGROUND_DESKTOP, BACKGROUND_MOBILE, BACKGROUND_ORIGIN } from "../src/lib/background.js";
+import {
+  BACKGROUND_DESKTOP,
+  BACKGROUND_DESKTOP_MEDIA,
+  BACKGROUND_MOBILE,
+  BACKGROUND_MOBILE_MEDIA,
+  BACKGROUND_ORIGIN,
+} from "../src/lib/background.js";
 
 // --- Structural assertions (primary gate, deterministic) ---
 
@@ -242,6 +248,19 @@ test("security headers carry the expected hardening", () => {
 });
 
 // --- LCP preload ---
+// The desktop preload must be the *negation* of the mobile one, not a
+// `min-width` one pixel above it. Viewport widths aren't integers, and
+// `(max-width: 640px)` / `(min-width: 641px)` leave 640 < width < 641
+// uncovered: that sliver paints the desktop background with nothing preloaded,
+// putting the LCP request back to undiscoverable — the exact problem the
+// preload exists to fix. Playwright viewports are integers, so no per-width
+// test below can reach that sliver; this guards the property structurally
+// instead, and fails if anyone "simplifies" the query back to a numeric bound.
+test("the two preload media queries leave no gap", () => {
+  expect(BACKGROUND_DESKTOP_MEDIA).toBe(`not all and ${BACKGROUND_MOBILE_MEDIA}`);
+  expect(BACKGROUND_DESKTOP_MEDIA).not.toMatch(/min-width/);
+});
+
 // The Cloudinary background is the LCP element and lives only in CSS, so the
 // browser can't discover it from the HTML. Layout.astro preloads it at high
 // priority; these assert the preload is there and — crucially — that the URL it
@@ -252,8 +271,8 @@ for (const path of ["/", "/contact"]) {
   test(`${path} preloads the background at high priority`, async ({ page }) => {
     await page.goto(path);
 
-    const mobile = page.locator('link[rel="preload"][media*="max-width"]');
-    const desktop = page.locator('link[rel="preload"][media*="min-width"]');
+    const mobile = page.locator(`link[rel="preload"][media="${BACKGROUND_MOBILE_MEDIA}"]`);
+    const desktop = page.locator(`link[rel="preload"][media="${BACKGROUND_DESKTOP_MEDIA}"]`);
 
     for (const link of [mobile, desktop]) {
       await expect(link).toHaveAttribute("as", "image");
@@ -285,6 +304,30 @@ for (const path of ["/", "/contact"]) {
     expect(vars.mobile).toContain(BACKGROUND_MOBILE);
     expect(vars.desktop).toContain(BACKGROUND_DESKTOP);
   });
+
+  // The two preload media queries have to partition every width between them.
+  // A width matching neither preloads nothing (the LCP request goes back to
+  // being undiscoverable, which is the whole bug this change fixes); a width
+  // matching both preloads an image the page won't paint. Walk the widths
+  // around the breakpoint and assert exactly one preload matches and that it
+  // names the image actually painted there.
+  for (const width of [320, 412, 639, 640, 641, 642, 1024, 1440]) {
+    test(`${path} preloads exactly the painted background at ${width}px`, async ({ page }) => {
+      await page.setViewportSize({ width, height: 800 });
+      await page.goto(path);
+
+      const { matched, painted } = await page.evaluate(() => {
+        const links = [...document.querySelectorAll('link[rel="preload"][as="image"]')];
+        return {
+          matched: links.filter((l) => matchMedia(l.media).matches).map((l) => l.href),
+          painted: getComputedStyle(document.querySelector(".background")).backgroundImage,
+        };
+      });
+
+      expect(matched).toHaveLength(1);
+      expect(painted).toContain(matched[0]);
+    });
+  }
 }
 
 for (const path of ["/", "/contact"]) {

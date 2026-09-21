@@ -23,6 +23,22 @@ export const BACKGROUND_ORIGIN = "https://res.cloudinary.com";
  */
 export const BACKGROUND_MOBILE_MAX = 640;
 
+/**
+ * Media queries for the two preloads. They must partition *every* width
+ * between them: a width matching neither gets no preload at all, and a width
+ * matching both preloads an image it won't paint.
+ *
+ * Hence `not all and` rather than a `min-width` one pixel up. Viewport widths
+ * are not integers — a 640.5px viewport (fractional device pixel ratios, a
+ * zoomed page, a desktop window dragged to an odd size) satisfies neither
+ * `max-width: 640px` nor `min-width: 641px`, so that sliver would paint the
+ * desktop background with nothing preloaded. Negating the mobile query instead
+ * makes the desktop one its exact complement, with no gap to get wrong.
+ */
+export const BACKGROUND_MOBILE_MEDIA = `(max-width: ${BACKGROUND_MOBILE_MAX}px)`;
+
+export const BACKGROUND_DESKTOP_MEDIA = `not all and ${BACKGROUND_MOBILE_MEDIA}`;
+
 export const BACKGROUND_MOBILE = `${CLOUDINARY}/f_auto,q_auto,c_fill,w_800,dpr_auto/${ASSET}`;
 
 export const BACKGROUND_DESKTOP = `${CLOUDINARY}/f_auto,q_auto,dpr_auto/${ASSET}`;

@@ -2,8 +2,9 @@
 import Header from "../components/Header.astro";
 import {
   BACKGROUND_DESKTOP,
+  BACKGROUND_DESKTOP_MEDIA,
   BACKGROUND_MOBILE,
-  BACKGROUND_MOBILE_MAX,
+  BACKGROUND_MOBILE_MEDIA,
   BACKGROUND_ORIGIN,
 } from "../lib/background.js";
 import { routePath } from "../lib/route-path.js";
@@ -69,14 +70,14 @@ const structuredData = {
       rel="preload"
       as="image"
       fetchpriority="high"
-      media={`(max-width: ${BACKGROUND_MOBILE_MAX}px)`}
+      media={BACKGROUND_MOBILE_MEDIA}
       href={BACKGROUND_MOBILE}
     />
     <link
       rel="preload"
       as="image"
       fetchpriority="high"
-      media={`(min-width: ${BACKGROUND_MOBILE_MAX + 1}px)`}
+      media={BACKGROUND_DESKTOP_MEDIA}
       href={BACKGROUND_DESKTOP}
     />
     <style is:inline set:html={backgroundVars}></style>
