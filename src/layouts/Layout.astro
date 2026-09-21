@@ -1,5 +1,12 @@
 ---
 import Header from "../components/Header.astro";
+import {
+  BACKGROUND_DESKTOP,
+  BACKGROUND_DESKTOP_MEDIA,
+  BACKGROUND_MOBILE,
+  BACKGROUND_MOBILE_MEDIA,
+  BACKGROUND_ORIGIN,
+} from "../lib/background.js";
 import { routePath } from "../lib/route-path.js";
 import "../styles/global.css";
 
@@ -16,6 +23,13 @@ const canonical = new URL(routePath(Astro.url.pathname), Astro.site).href;
 // are accurate and there's no external dependency. See scripts/og-card.html.
 const ogImage = new URL("/og.png", Astro.site ?? canonical).href;
 const ogImageAlt = "buckley.ca";
+
+// Defined once on :root rather than with `define:vars`, which repeats the
+// declaration on every element the scoped style touches (<html>, <body> and
+// <main> here) — three copies of two long URLs in the critical HTML.
+const backgroundVars =
+  `:root{--background-desktop:url(${BACKGROUND_DESKTOP});` +
+  `--background-mobile:url(${BACKGROUND_MOBILE})}`;
 
 const siteUrl = Astro.site?.href ?? canonical;
 const structuredData = {
@@ -44,6 +58,29 @@ const structuredData = {
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <link rel="icon" type="image/png" href="/favicon.png" />
+
+    <!--
+      The Cloudinary background is the LCP element, and it is referenced only
+      from CSS — so the browser can't discover it until the stylesheet has
+      loaded and layout has run. Open the connection early and preload the one
+      crop this viewport will actually paint (see src/lib/background.js).
+    -->
+    <link rel="preconnect" href={BACKGROUND_ORIGIN} />
+    <link
+      rel="preload"
+      as="image"
+      fetchpriority="high"
+      media={BACKGROUND_MOBILE_MEDIA}
+      href={BACKGROUND_MOBILE}
+    />
+    <link
+      rel="preload"
+      as="image"
+      fetchpriority="high"
+      media={BACKGROUND_DESKTOP_MEDIA}
+      href={BACKGROUND_DESKTOP}
+    />
+    <style is:inline set:html={backgroundVars}></style>
     <meta name="author" content="Sean Buckley" />
     <title>{title}</title>
     <meta name="description" content={description} />
@@ -78,14 +115,14 @@ const structuredData = {
 
 <style>
   .background {
-    background: url(https://res.cloudinary.com/buckey-ca/image/upload/f_auto,q_auto,dpr_auto/background-1600_ovnjor.jpg)
-      fixed no-repeat center center;
+    background: var(--background-desktop) fixed no-repeat center center;
     background-size: cover;
   }
 
+  /* Keep in step with BACKGROUND_MOBILE_MAX in src/lib/background.js. */
   @media (max-width: 640px) {
     .background {
-      background-image: url(https://res.cloudinary.com/buckey-ca/image/upload/f_auto,q_auto,c_fill,w_800,dpr_auto/background-1600_ovnjor.jpg);
+      background-image: var(--background-mobile);
     }
   }
 </style>
