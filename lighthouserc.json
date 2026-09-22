@@ -1,0 +1,25 @@
+{
+  "ci": {
+    "collect": {
+      "url": ["https://buckley.ca/", "https://buckley.ca/contact"],
+      "numberOfRuns": 3
+    },
+    "assert": {
+      "assertions": {
+        "largest-contentful-paint": [
+          "error",
+          { "maxNumericValue": 2500, "aggregationMethod": "median" }
+        ],
+        "first-contentful-paint": [
+          "error",
+          { "maxNumericValue": 2000, "aggregationMethod": "median" }
+        ],
+        "cumulative-layout-shift": [
+          "error",
+          { "maxNumericValue": 0.01, "aggregationMethod": "median" }
+        ],
+        "total-blocking-time": ["error", { "maxNumericValue": 50, "aggregationMethod": "median" }]
+      }
+    }
+  }
+}
