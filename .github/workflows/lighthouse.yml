@@ -1,0 +1,28 @@
+# Scheduled drift detection against production, not a per-commit gate.
+# Budgets live in lighthouserc.json and are metric budgets, not category
+# scores: mobile Performance sits at 99 because of Cloudflare's
+# edge-injected Web Analytics beacon, which is not in this repo.
+name: Lighthouse
+
+on:
+  schedule:
+    # Mondays 14:00 UTC (06:00/07:00 Pacific)
+    - cron: "0 14 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  lighthouse:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Lighthouse (production)
+        # v12 — pinned to a commit SHA; Dependabot bumps it.
+        uses: treosh/lighthouse-ci-action@3e7e23fb74242897f95c0ba9cabad3d0227b9b18 # v12
+        with:
+          configPath: ./lighthouserc.json
+          uploadArtifacts: true
