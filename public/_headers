@@ -20,6 +20,16 @@
 #                         script would likewise need its origin added here — and
 #                         tests/test.spec.js will fail loudly if a page ever loads
 #                         something this policy blocks.
+#                         Known, accepted console error: Bot Fight Mode's
+#                         JavaScript Detections injects an *inline* script at the
+#                         edge whose content (and hash) changes per request, so
+#                         this policy blocks it. That is deliberate — the fix
+#                         options ('unsafe-inline', a fixed nonce, or a
+#                         per-request nonce via a Pages Function) all cost more
+#                         than they buy. Bot Fight Mode stays on, it just runs
+#                         without its JS signal. Lighthouse Best Practices reads
+#                         93 because of it; the scheduled Lighthouse workflow
+#                         asserts metrics, not scores, so it doesn't fail CI.
 #   - img/style/font      allow any https: source (+ data:) so new images, web
 #                         fonts, or inline styles Just Work.
 #   - connect-src         same-origin fetch/XHR, plus cloudflareinsights.com —
