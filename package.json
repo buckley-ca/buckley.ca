@@ -9,8 +9,8 @@
     "preview": "astro preview",
     "check": "astro check",
     "test": "playwright test",
-    "lint": "vp fmt --check .",
-    "format": "vp fmt .",
+    "lint": "vp fmt --check . && prettier --check \"**/*.astro\"",
+    "format": "vp fmt . && prettier --write \"**/*.astro\"",
     "prepare": "vp config"
   },
   "devDependencies": {
@@ -18,6 +18,8 @@
     "@astrojs/sitemap": "^3.7.4",
     "@playwright/test": "^1.63.0",
     "astro": "^7.3.5",
+    "prettier": "^3.9.9",
+    "prettier-plugin-astro": "^1.1.0",
     "typescript": "^6.0.3",
     "vite-plus": "1.0.0"
   },
