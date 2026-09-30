@@ -24,7 +24,7 @@
   "engines": {
     "node": ">=24.0.0"
   },
-  "packageManager": "npm@12.1.0",
+  "packageManager": "npm@12.2.0",
   "allowScripts": {
     "sharp@0.34.5": true,
     "esbuild@0.28.2": true

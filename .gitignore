@@ -1,5 +1,6 @@
 .DS_Store
 node_modules
+
 # Astro build output and cache
 dist/
 .astro/
@@ -7,8 +8,16 @@ dist/
 test-results/
 playwright-report/
 
+# Environment files
 .env
 .env.*
 !.env.example
+
+# Map files
+*.js.map
 *.css.map
-.vscode/
+
+# VS Code
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
