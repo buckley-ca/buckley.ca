@@ -24,7 +24,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Lint (Prettier)
+      - name: Lint (Oxfmt + Prettier for .astro)
         run: npm run lint
 
       - name: Type check

@@ -1,6 +1,27 @@
 {
-    "conventionalCommits.scopes": [
-        "AI",
-        "deps"
-    ]
+  "conventionalCommits.scopes": [
+    "deps",
+    "deps-dev",
+    "headers",
+    "astro",
+    "vite",
+    "ci",
+    "a11y",
+    "seo",
+    "404",
+    "release",
+    "AI"
+  ],
+  "editor.defaultFormatter": "oxc.oxc-vscode",
+  "[javascript]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
+  "[javascriptreact]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
+  "[typescript]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
+  "[typescriptreact]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
+  "[astro]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "oxc.disableNestedConfig": true,
+  "oxc.fmt.disableNestedConfig": true,
+  "editor.formatOnSave": true,
+  "editor.formatOnSaveMode": "file",
+  "editor.codeActionsOnSave": { "source.fixAll.oxc": "explicit" },
+  "npm.scriptRunner": "vp"
 }

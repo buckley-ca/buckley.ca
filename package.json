@@ -9,8 +9,9 @@
     "preview": "astro preview",
     "check": "astro check",
     "test": "playwright test",
-    "lint": "prettier --check .",
-    "format": "prettier --write ."
+    "lint": "vp fmt --check . && prettier --check \"**/*.astro\"",
+    "format": "vp fmt . && prettier --write \"**/*.astro\"",
+    "prepare": "vp config"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
@@ -19,7 +20,8 @@
     "astro": "^7.3.5",
     "prettier": "^3.9.9",
     "prettier-plugin-astro": "^1.1.0",
-    "typescript": "^6.0.3"
+    "typescript": "^6.0.3",
+    "vite-plus": "1.0.0"
   },
   "engines": {
     "node": ">=24.0.0"
@@ -28,5 +30,8 @@
   "allowScripts": {
     "sharp@0.34.5": true,
     "esbuild@0.28.2": true
+  },
+  "overrides": {
+    "vite": "npm:@voidzero-dev/vite-plus-core@1.0.0"
   }
 }
