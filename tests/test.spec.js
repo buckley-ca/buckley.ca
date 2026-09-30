@@ -154,7 +154,7 @@ function parseCloudflareHeaders() {
   const text = readFileSync(fileURLToPath(new URL("../public/_headers", import.meta.url)), "utf8");
   const map = {};
   let path = null;
-  for (const line of text.split("\n")) {
+  for (const line of text.split(/\r?\n/)) {
     if (line.startsWith("#")) continue;
     if (line.startsWith("/")) {
       path = line.trim();
