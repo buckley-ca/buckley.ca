@@ -5,32 +5,49 @@ site built with [Astro](https://astro.build).
 
 ## Developing
 
-Install dependencies and start a development server:
+This project uses [Vite+](https://viteplus.dev/guide/) (`vp`), a unified toolchain that wraps
+Vite, Vitest, Oxlint and Oxfmt. Install the global `vp` CLI, then:
 
 ```bash
-npm install
-npm run dev
+vp install
+vp run dev
 
 # or start the server and open the app in a new browser tab
-npm run dev -- --open
+vp run dev --open
 ```
+
+Plain `npm install` / `npm run <script>` still work — `vp` is a convenience layer, and CI uses npm.
 
 ## Scripts
 
-| Command           | Description                               |
-| ----------------- | ----------------------------------------- |
-| `npm run dev`     | Start the local dev server                |
-| `npm run build`   | Build the production site to `dist/`      |
-| `npm run preview` | Preview the production build locally      |
-| `npm run check`   | Type-check `.astro` files (`astro check`) |
-| `npm run test`    | Run the Playwright end-to-end tests       |
-| `npm run lint`    | Check formatting with Prettier            |
-| `npm run format`  | Apply Prettier formatting                 |
+`vp <name>` runs a **Vite+ built-in**; `vp run <name>` (alias `vpr`) runs the **`package.json`
+script**. They are not interchangeable — use `vp run` for the scripts below.
+
+| Command          | Description                                      |
+| ---------------- | ------------------------------------------------ |
+| `vp run dev`     | Start the Astro dev server                       |
+| `vp run build`   | Build the production site to `dist/`             |
+| `vp run preview` | Preview the production build locally             |
+| `vp run check`   | Type-check `.astro` files (`astro check`)        |
+| `vp run test`    | Run the Playwright end-to-end tests              |
+| `vp run lint`    | Check formatting (Oxfmt + Prettier for `.astro`) |
+| `vp run format`  | Apply formatting (Oxfmt + Prettier for `.astro`) |
+
+Useful built-ins:
+
+| Command            | Description                                                                        |
+| ------------------ | ---------------------------------------------------------------------------------- |
+| `vp check [--fix]` | Format (Oxfmt), lint (Oxlint) and type-check JS/TS in one pass                     |
+| `vp test`          | Vitest unit tests — none yet, so it passes with no tests                           |
+| `vp staged`        | Pre-commit hook (`.vite-hooks/pre-commit`) — runs `vp check --fix` on staged files |
+
+> `vp test` is **not** the Playwright suite. `tests/` is excluded from Vitest in
+> `vite.config.ts`; run end-to-end tests with `vp run test`.
 
 ## Building & deploying
 
 ```bash
-npm run build
+vp run build
 ```
 
 The site is fully static (`output: 'static'`) and is published to `dist/`.

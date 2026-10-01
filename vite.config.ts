@@ -1,6 +1,12 @@
 import { defineConfig } from "vite-plus";
 
 export default defineConfig({
+  // `vp test` is Vitest. The suite in tests/ is Playwright (run via `vp run test`), so keep
+  // Vitest out of it and let it pass until unit tests exist.
+  test: {
+    exclude: ["**/node_modules/**", "tests/**"],
+    passWithNoTests: true,
+  },
   staged: {
     "*": "vp check --fix",
   },
