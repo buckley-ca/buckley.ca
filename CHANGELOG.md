@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- `pnpm-workspace.yaml`: pnpm settings — `engineStrict`, install-script allowlist (`esbuild`,
+  `sharp`), the `vite` → Vite+ core override, and a peer rule for that alias
+- Vite+ (`vp`) workflow documented in `README.md`, `CLAUDE.md` and `AGENTS.md`
 - SEO/social meta in `Layout.astro`: canonical link, Open Graph and Twitter Card tags
 - `site` set in `astro.config.mjs` (enables absolute canonical URLs)
 - `public/robots.txt` and `public/sitemap.xml`
@@ -20,6 +23,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Package manager switched from npm to **pnpm** (`packageManager: pnpm@12.8.1`):
+  `package-lock.json` → `pnpm-lock.yaml`; CI uses `pnpm/action-setup` and
+  `pnpm install --frozen-lockfile`; Playwright `webServer` runs `pnpm run build/preview`
+- `allowScripts` and `overrides` moved from `package.json` into `pnpm-workspace.yaml`
 - `README.md` rewritten for Astro (was still SvelteKit boilerplate)
 - Bumped `dependency-review.yml` actions (`checkout@v4`, `dependency-review-action@v4`)
 - Accessibility: SVG logo `role="img"`/`aria-label`, nav `aria-current`, honeypot
@@ -27,12 +34,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+- `package-lock.json` and `.npmrc` (`engine-strict` now lives in `pnpm-workspace.yaml`)
 - Obsolete/invalid CSS: bogus `-webkit-padding`, redundant `-moz-`/`-webkit-`
   `border-radius`, `background-size`, and `filter` vendor prefixes; deduped the
   background-image media query
 
 ### Fixed
 
+- `vp test` (Vitest) no longer collects the Playwright suite in `tests/`
 - **tests/test.js**: Fixed broken test - was expecting "Welcome to SvelteKit", now expects "buckley"
 - **src/routes/+error.svelte**: Removed `@ts-nocheck`, added null-safe access `$page.error?.message ?? 'Unknown error'`
 - **src/lib/ContactForm.svelte**: Added `required` attrs, `<label for>/<input id>` associations
