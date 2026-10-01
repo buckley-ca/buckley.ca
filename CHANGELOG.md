@@ -20,6 +20,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Migrated toolchain to Vite+ 1.0.0 (`vp`) per <https://viteplus.dev/guide/migrate>; Oxfmt +
+  Oxlint via `vp check`, Prettier kept for `.astro`, Playwright run via `vp run test`
 - `README.md` rewritten for Astro (was still SvelteKit boilerplate)
 - Bumped `dependency-review.yml` actions (`checkout@v4`, `dependency-review-action@v4`)
 - Accessibility: SVG logo `role="img"`/`aria-label`, nav `aria-current`, honeypot
