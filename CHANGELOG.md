@@ -8,6 +8,10 @@ merge to `master`; versions mark notable milestones and are tagged `vX.Y.Z`.
 
 ## [Unreleased]
 
+### Fixed
+
+- `.gitattributes` forces LF line endings so `vp check` passes on Windows checkouts
+
 ## [1.1.0] - 2026-10-01
 
 ### Added

@@ -1,0 +1,2 @@
+# Always check out text files with LF so Oxfmt/Prettier don't flag CRLF on Windows
+* text=auto eol=lf
