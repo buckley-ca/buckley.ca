@@ -25,3 +25,10 @@ release. Add a tool name to select part of the graph. For example, run
 - [ ] If setup, runtime, or package-manager behavior looks wrong, run `vp env doctor` and include its output when asking for help.
 
 <!--VITE PLUS END-->
+
+## Project notes (buckley.ca)
+
+- `tests/` is a **Playwright** suite. Run it with `vp run test`, not `vp test` (Vitest), which
+  excludes `tests/` via `vite.config.ts` and passes with no tests.
+- `vp check` does not format `.astro` files; `vp run lint` / `vp run format` add Prettier for those.
+- See `CLAUDE.md` and `README.md` for the full command list.
