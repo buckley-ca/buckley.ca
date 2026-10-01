@@ -1,11 +1,36 @@
 # Changelog
 
-All notable changes to this project will be documented in this file.
+All notable changes to this project are documented here, in the style of
+[Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+The site deploys on every merge to `master`, so there are no version numbers: changes are grouped
+under the date they merged (UTC, newest first). Add new entries under today's date, creating the
+heading if needed.
 
-## [Unreleased]
+## 2026-10-01
+
+### Fixed
+
+- `vp test` (Vitest) no longer collects the Playwright suite in `tests/`; Vite+ workflow
+  documented in `README.md`, `CLAUDE.md` and `AGENTS.md`
+
+## 2026-09-30
+
+### Changed
+
+- Migrated toolchain to Vite+ 1.0.0 (`vp`) per <https://viteplus.dev/guide/migrate>; Oxfmt +
+  Oxlint via `vp check`, Prettier kept for `.astro`, Playwright run via `vp run test`
+
+## 2026-09-22
+
+### Added
+
+- `.github/workflows/lighthouse.yml` + `lighthouserc.json`: weekly (and on-demand) Lighthouse
+  run against production, median of 3, asserting LCP/FCP/CLS/TBT budgets
+
+## 2026-06-26
+
+Migrated from SvelteKit to Astro 7.
 
 ### Added
 
@@ -13,15 +38,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `site` set in `astro.config.mjs` (enables absolute canonical URLs)
 - `public/robots.txt` and `public/sitemap.xml`
 - `.github/workflows/ci.yml`: runs lint, type-check, build, and Playwright tests on PRs
-- `.github/workflows/lighthouse.yml` + `lighthouserc.json`: weekly (and on-demand) Lighthouse
-  run against production, median of 3, asserting LCP/FCP/CLS/TBT budgets
 - `engines.node` (`^24.0.0`) in `package.json` so Vercel (which does not read
   `.node-version`) builds on a Node version Astro 7 supports
 
 ### Changed
 
-- Migrated toolchain to Vite+ 1.0.0 (`vp`) per <https://viteplus.dev/guide/migrate>; Oxfmt +
-  Oxlint via `vp check`, Prettier kept for `.astro`, Playwright run via `vp run test`
 - `README.md` rewritten for Astro (was still SvelteKit boilerplate)
 - Bumped `dependency-review.yml` actions (`checkout@v4`, `dependency-review-action@v4`)
 - Accessibility: SVG logo `role="img"`/`aria-label`, nav `aria-current`, honeypot
@@ -33,84 +54,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `border-radius`, `background-size`, and `filter` vendor prefixes; deduped the
   background-image media query
 
+## 2026-03-02
+
+SvelteKit site; fixes from the [2026-03-02 code review](docs/code-review-2026-03-02.md).
+
 ### Fixed
 
 - **tests/test.js**: Fixed broken test - was expecting "Welcome to SvelteKit", now expects "buckley"
 - **src/routes/+error.svelte**: Removed `@ts-nocheck`, added null-safe access `$page.error?.message ?? 'Unknown error'`
 - **src/lib/ContactForm.svelte**: Added `required` attrs, `<label for>/<input id>` associations
 - **src/lib/Logo.svelte**: Fixed `viewbox` → `viewBox` (camelCase), added a11y svelte-ignore
-
----
-
-## AI Developer Notes
-
-### Project Structure
-
-- SvelteKit 5.x with Svelte 5 runes (`$state`, `$derived`, `$effect`)
-- Cloudflare Workers deployment via Wrangler
-- Pre-rendered static site (`prerender = true` in +layout.js)
-- ESLint + Prettier for code quality
-
-### Key Files
-
-- `src/routes/+layout.svelte` - Main layout with background image
-- `src/routes/+page.svelte` - Homepage with logo
-- `src/routes/contact/+page.svelte` - Contact page with form
-- `src/lib/ContactForm.svelte` - Formspree integration
-- `src/lib/Logo.svelte` - SVG logo component
-
-### Known Technical Debt
-
-- Animation delays use `delay: 5` which is 5ms (likely intended as 5000ms for seconds)
-- External background image URL should be moved to local/static assets
-- Missing SEO meta tags (Open Graph, Twitter Cards)
-- ESLint config may need updating for Svelte 5
-- adapter-auto config has potentially conflicting route exclusions
-
-### Environment Variables Needed
-
-- None currently (Formspree URL is hardcoded)
-
-### Testing
-
-- Playwright tests in `tests/test.js`
-- Run with `npm run test`
-
-### Scripts
-
-- `npm run dev` - Development server
-- `npm run build` - Production build
-- `npm run check` - Type checking
-- `npm run lint` - Linting
-- `npm run format` - Code formatting
-
----
-
-## Code Review Findings (2026-03-02)
-
-### High Priority
-
-| Issue                   | File                       | Fix      |
-| ----------------------- | -------------------------- | -------- |
-| Broken test             | tests/test.js              | ✅ Fixed |
-| @ts-nocheck unsafe      | src/routes/+error.svelte   | ✅ Fixed |
-| Missing form validation | src/lib/ContactForm.svelte | ✅ Fixed |
-
-### Medium Priority
-
-| Issue                   | File                               | Recommendation                  |
-| ----------------------- | ---------------------------------- | ------------------------------- |
-| Missing OG/Twitter meta | +layout.svelte, +page.svelte       | Add og:\*, twitter:card tags    |
-| Animation timing off    | +page.svelte, contact/+page.svelte | ✅ Fixed                        |
-| External background     | +layout.svelte                     | Host locally in static/         |
-| CLS on header           | Header.svelte                      | Use px instead of vh for height |
-| Missing skip nav        | Header.svelte                      | Add skip link for a11y          |
-
-### Low Priority
-
-| Issue                       | File               | Recommendation                      |
-| --------------------------- | ------------------ | ----------------------------------- |
-| Missing sitemap, robots.txt | root               | Add static/sitemap.xml, robots.txt  |
-| Missing PWA icons           | static             | Add apple-touch-icon, manifest.json |
-| Duplicate CSS               | +layout.svelte     | Consolidate background-size rules   |
-| Hardcoded Formspree URL     | ContactForm.svelte | Move to env var                     |

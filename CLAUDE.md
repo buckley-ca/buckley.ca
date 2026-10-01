@@ -19,4 +19,6 @@ adapter). See [README.md](README.md) for the full script list.
 ## Conventions
 
 - Keep it a simple static site — no SSR/CMS, minimal dependencies; anything fancier must earn it.
+- `CHANGELOG.md` uses dated headings (merge date, UTC), not versions — add entries under today's
+  date.
 - Git (commits, branches, PRs) follows the global `~/.claude/CLAUDE.md`.
