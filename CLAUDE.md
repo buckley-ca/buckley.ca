@@ -23,4 +23,6 @@ adapter). See [README.md](README.md) for the full script list.
 ## Conventions
 
 - Keep it a simple static site — no SSR/CMS, minimal dependencies; anything fancier must earn it.
+- `CHANGELOG.md` follows Keep a Changelog + semver: add entries under `## [Unreleased]`. A release
+  moves them to `## [X.Y.Z] - YYYY-MM-DD`, bumps `package.json`, and tags `vX.Y.Z` after merge.
 - Git (commits, branches, PRs) follows the global `~/.claude/CLAUDE.md`.
