@@ -9,6 +9,22 @@ heading if needed.
 
 ## 2026-10-01
 
+### Added
+
+- `pnpm-workspace.yaml`: pnpm settings — `engineStrict`, install-script allowlist (`esbuild`,
+  `sharp`), the `vite` → Vite+ core override, and a peer rule for that alias
+
+### Changed
+
+- Package manager switched from npm to **pnpm** (`packageManager: pnpm@12.8.1`):
+  `package-lock.json` → `pnpm-lock.yaml`; CI uses `pnpm/action-setup` and
+  `pnpm install --frozen-lockfile`; Playwright `webServer` runs `pnpm run build/preview`
+- `allowScripts` and `overrides` moved from `package.json` into `pnpm-workspace.yaml`
+
+### Removed
+
+- `package-lock.json` and `.npmrc` (`engine-strict` now lives in `pnpm-workspace.yaml`)
+
 ### Fixed
 
 - `vp test` (Vitest) no longer collects the Playwright suite in `tests/`; Vite+ workflow
