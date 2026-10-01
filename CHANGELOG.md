@@ -11,7 +11,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `pnpm-workspace.yaml`: pnpm settings — `engineStrict`, install-script allowlist (`esbuild`,
   `sharp`), the `vite` → Vite+ core override, and a peer rule for that alias
-- Vite+ (`vp`) workflow documented in `README.md`, `CLAUDE.md` and `AGENTS.md`
 - SEO/social meta in `Layout.astro`: canonical link, Open Graph and Twitter Card tags
 - `site` set in `astro.config.mjs` (enables absolute canonical URLs)
 - `public/robots.txt` and `public/sitemap.xml`
@@ -23,6 +22,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Migrated toolchain to Vite+ 1.0.0 (`vp`) per <https://viteplus.dev/guide/migrate>; Oxfmt +
+  Oxlint via `vp check`, Prettier kept for `.astro`, Playwright run via `vp run test`
 - Package manager switched from npm to **pnpm** (`packageManager: pnpm@12.8.1`):
   `package-lock.json` → `pnpm-lock.yaml`; CI uses `pnpm/action-setup` and
   `pnpm install --frozen-lockfile`; Playwright `webServer` runs `pnpm run build/preview`
