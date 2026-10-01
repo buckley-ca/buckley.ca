@@ -35,6 +35,7 @@
   "editor.codeActionsOnSave": {
     "source.fixAll.oxc": "explicit"
   },
+  "npm.packageManager": "pnpm",
   "npm.scriptRunner": "vp",
   "[css]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"

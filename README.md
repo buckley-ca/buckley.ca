@@ -16,7 +16,9 @@ vp run dev
 vp run dev --open
 ```
 
-Plain `npm install` / `npm run <script>` still work — `vp` is a convenience layer, and CI uses npm.
+The package manager is **pnpm** (pinned via `packageManager`; `corepack enable` provides it).
+`vp install` delegates to pnpm, and plain `pnpm install` / `pnpm run <script>` work too — CI uses
+pnpm directly.
 
 ## Scripts
 

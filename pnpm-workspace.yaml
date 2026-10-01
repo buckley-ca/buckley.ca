@@ -1,0 +1,15 @@
+engineStrict: true
+
+# Packages allowed to run install scripts (pnpm blocks them by default).
+allowBuilds:
+  esbuild: true
+  sharp: true
+
+# Vite+ ships its own Vite core; alias it so Astro and vite-plus share one copy.
+overrides:
+  vite: npm:@voidzero-dev/vite-plus-core@1.0.0
+
+# vitest declares a vite@^6–8 peer; the vite-plus core alias above reports 1.0.0.
+peerDependencyRules:
+  allowedVersions:
+    vite: "1.0.0"
