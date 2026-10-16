@@ -25,15 +25,15 @@ pnpm directly.
 `vp <name>` runs a **Vite+ built-in**; `vp run <name>` (alias `vpr`) runs the **`package.json`
 script**. They are not interchangeable — use `vp run` for the scripts below.
 
-| Command          | Description                                      |
-| ---------------- | ------------------------------------------------ |
-| `vp run dev`     | Start the Astro dev server                       |
-| `vp run build`   | Build the production site to `dist/`             |
-| `vp run preview` | Preview the production build locally             |
-| `vp run check`   | Type-check `.astro` files (`astro check`)        |
-| `vp run test`    | Run the Playwright end-to-end tests              |
-| `vp run lint`    | Check formatting (Oxfmt + Prettier for `.astro`) |
-| `vp run format`  | Apply formatting (Oxfmt + Prettier for `.astro`) |
+| Command          | Description                               |
+| ---------------- | ----------------------------------------- |
+| `vp run dev`     | Start the Astro dev server                |
+| `vp run build`   | Build the production site to `dist/`      |
+| `vp run preview` | Preview the production build locally      |
+| `vp run check`   | Type-check `.astro` files (`astro check`) |
+| `vp run test`    | Run the Playwright end-to-end tests       |
+| `vp run lint`    | Check formatting (Oxfmt, incl. `.astro`)  |
+| `vp run format`  | Apply formatting (Oxfmt, incl. `.astro`)  |
 
 Useful built-ins:
 

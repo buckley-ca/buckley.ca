@@ -18,6 +18,8 @@ export default defineConfig({
   fmt: {
     printWidth: 100,
     sortPackageJson: false,
+    // Formats .astro via the bundled prettier-plugin-astro; needs @astrojs/compiler-rs installed.
+    astro: true,
     ignorePatterns: [
       ".DS_Store",
       "node_modules",

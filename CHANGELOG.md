@@ -8,6 +8,11 @@ merge to `master`; versions mark notable milestones and are tagged `vX.Y.Z`.
 
 ## [Unreleased]
 
+### Changed
+
+- `.astro` files are formatted by Oxfmt (Vite+ 1.1.0 → 1.3.0, Oxfmt 0.73); Prettier and
+  `prettier-plugin-astro` removed
+
 ### Fixed
 
 - `.gitattributes` forces LF line endings so `vp check` passes on Windows checkouts

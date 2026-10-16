@@ -14,7 +14,7 @@
   ],
   "editor.defaultFormatter": "oxc.oxc-vscode",
   "[javascript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "oxc.oxc-vscode"
   },
   "[javascriptreact]": {
     "editor.defaultFormatter": "oxc.oxc-vscode"
@@ -26,7 +26,7 @@
     "editor.defaultFormatter": "oxc.oxc-vscode"
   },
   "[astro]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "oxc.oxc-vscode"
   },
   "oxc.disableNestedConfig": true,
   "oxc.fmt.disableNestedConfig": true,
@@ -36,8 +36,5 @@
     "source.fixAll.oxc": "explicit"
   },
   "npm.packageManager": "pnpm",
-  "npm.scriptRunner": "vp",
-  "[css]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  }
+  "npm.scriptRunner": "vp"
 }
