@@ -10,8 +10,8 @@ merge to `master`; versions mark notable milestones and are tagged `vX.Y.Z`.
 
 ### Changed
 
-- `.astro` files are formatted by Oxfmt (Vite+ 1.1.0 → 1.3.0, Oxfmt 0.73); Prettier and
-  `prettier-plugin-astro` removed
+- `.astro` files are formatted by Oxfmt 0.73 (Vite+ 1.3.0); Prettier and `prettier-plugin-astro`
+  removed; Vite core alias aligned to 1.3.0
 
 ### Fixed
 
