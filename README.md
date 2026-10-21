@@ -16,9 +16,9 @@ vp run dev
 vp run dev --open
 ```
 
-The package manager is **pnpm** (pinned via `packageManager`; `corepack enable` provides it).
-`vp install` delegates to pnpm, and plain `pnpm install` / `pnpm run <script>` work too — CI uses
-pnpm directly.
+Requires **Node 24+** (pinned in `.node-version`). The package manager is **pnpm** (pinned via
+`packageManager`; `corepack enable` provides it). `vp install` delegates to pnpm, and plain
+`pnpm install` / `pnpm run <script>` work too — CI uses pnpm directly.
 
 ## Scripts
 
@@ -39,14 +39,6 @@ Formatting uses Oxfmt defaults with Astro support enabled. Exclusions come from 
 Oxfmt's built-in defaults. Type-aware checks and Vite+ import rules stay enabled to catch errors
 and keep tooling imports consistent.
 
-Astro telemetry is disabled in CI with `ASTRO_TELEMETRY_DISABLED=1`. Locally, set the same
-environment variable or run `vp exec astro telemetry disable` once per machine. The installed Vite+ JavaScript and documentation expose no additional telemetry control.
-
-Repository agent settings disable Codex analytics and OpenTelemetry export, plus Claude Code usage
-metrics, error reporting, and OpenTelemetry export. Restart agents after changing these settings.
-User or managed settings can affect the final configuration. Lighthouse error reporting is also disabled.
-Cloudflare visitor analytics remains enabled.
-
 Useful built-ins:
 
 | Command            | Description                                                                        |
@@ -57,6 +49,18 @@ Useful built-ins:
 
 > `vp test` is **not** the Playwright suite. `tests/` is excluded from Vitest in
 > `vite.config.ts`; run end-to-end tests with `vp run test`.
+
+## Telemetry
+
+Development-tool telemetry is off; Cloudflare visitor analytics stays on.
+
+- **Astro:** CI sets `ASTRO_TELEMETRY_DISABLED=1`. Locally, set the same environment variable or
+  run `vp exec astro telemetry disable` once per machine.
+- **AI agents:** `.claude/settings.json` and `.codex/config.toml` disable usage metrics, error
+  reporting and OpenTelemetry export. Restart agents after changing them; user or managed settings
+  can still override.
+- **Lighthouse:** error reporting is disabled in `lighthouserc.json`.
+- **Vite+:** exposes no telemetry setting.
 
 ## Building & deploying
 
