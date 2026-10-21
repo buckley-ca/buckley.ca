@@ -15,25 +15,6 @@ import Layout from "../layouts/Layout.astro";
 </Layout>
 
 <style>
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(8px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  .center {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 95vh;
-  }
-
   .logo-container {
     text-align: center;
     animation: fadeIn 1.5s ease both;
@@ -57,12 +38,5 @@ import Layout from "../layouts/Layout.astro";
 
   h1 span {
     font-size: 1.5rem;
-    right: 0.5rem;
-  }
-
-  @media (min-width: 640px) {
-    section {
-      max-width: none;
-    }
   }
 </style>

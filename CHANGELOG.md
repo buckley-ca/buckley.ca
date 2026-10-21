@@ -15,6 +15,17 @@ merge to `main`; versions mark notable milestones and are tagged `vX.Y.Z`.
 - Use native Oxfmt Astro formatting with the Rust compiler and remove direct Prettier tooling
 - Run Vite+ formatting, linting and type checking in CI
 - Default branch renamed to `main`; CI runs on pushes to `main`
+- Shared `.center` layout and `fadeIn` animation moved into `global.css`
+- `Compass.astro` simplified to the single 404-page use (no props)
+- Playwright suite trimmed from 43 to 20 tests; adds a 404-page check
+- Shorter, plainer comments in `public/_headers` and `src/lib/background.js`
+- CI no longer builds the site twice (Playwright only previews in CI)
+
+### Removed
+
+- `vercel.json` and its header-sync test: the site deploys only to Cloudflare Pages
+- Dead CSS, the unused `_captcha` form field, legacy SVG attributes, and the archived
+  SvelteKit-era `docs/code-review-2026-03-02.md`
 
 ### Fixed
 
