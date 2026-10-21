@@ -11,7 +11,7 @@ adapter). See [README.md](README.md) for the full script list.
   `package.json` script of that name. `pnpm run <name>` also works and is what CI uses.
 - `vp run dev` · `vp run build` (→ `dist/`) · `vp run preview`.
 - Before calling a change done: `vp check` (Oxfmt + Oxlint + TS), `vp run check` (astro check),
-  `vp run test` (Playwright), `vp run lint` (also covers `.astro` via Prettier).
+  `vp run test` (Playwright), `vp run lint` (runs `vp check`, including Astro formatting).
 - `vp test` is Vitest, not Playwright — `tests/` is excluded in `vite.config.ts`, so it reports no
   tests. Never use it to validate the e2e suite.
 - Astro 7 detaches `astro preview` when it detects an AI agent (`AI_AGENT`, `CLAUDECODE`), so

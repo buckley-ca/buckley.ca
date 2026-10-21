@@ -13,21 +13,6 @@
     "AI"
   ],
   "editor.defaultFormatter": "oxc.oxc-vscode",
-  "[javascript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[javascriptreact]": {
-    "editor.defaultFormatter": "oxc.oxc-vscode"
-  },
-  "[typescript]": {
-    "editor.defaultFormatter": "oxc.oxc-vscode"
-  },
-  "[typescriptreact]": {
-    "editor.defaultFormatter": "oxc.oxc-vscode"
-  },
-  "[astro]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
   "oxc.disableNestedConfig": true,
   "oxc.fmt.disableNestedConfig": true,
   "editor.formatOnSave": true,
@@ -36,8 +21,5 @@
     "source.fixAll.oxc": "explicit"
   },
   "npm.packageManager": "pnpm",
-  "npm.scriptRunner": "vp",
-  "[css]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  }
+  "npm.scriptRunner": "vp"
 }

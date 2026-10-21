@@ -1,2 +1,2 @@
-# Always check out text files with LF so Oxfmt/Prettier don't flag CRLF on Windows
+# Use LF for cross-platform formatting.
 * text=auto eol=lf

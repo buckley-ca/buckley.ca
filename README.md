@@ -25,15 +25,27 @@ pnpm directly.
 `vp <name>` runs a **Vite+ built-in**; `vp run <name>` (alias `vpr`) runs the **`package.json`
 script**. They are not interchangeable — use `vp run` for the scripts below.
 
-| Command          | Description                                      |
-| ---------------- | ------------------------------------------------ |
-| `vp run dev`     | Start the Astro dev server                       |
-| `vp run build`   | Build the production site to `dist/`             |
-| `vp run preview` | Preview the production build locally             |
-| `vp run check`   | Type-check `.astro` files (`astro check`)        |
-| `vp run test`    | Run the Playwright end-to-end tests              |
-| `vp run lint`    | Check formatting (Oxfmt + Prettier for `.astro`) |
-| `vp run format`  | Apply formatting (Oxfmt + Prettier for `.astro`) |
+| Command          | Description                                 |
+| ---------------- | ------------------------------------------- |
+| `vp run dev`     | Start the Astro dev server                  |
+| `vp run build`   | Build the production site to `dist/`        |
+| `vp run preview` | Preview the production build locally        |
+| `vp run check`   | Type-check `.astro` files (`astro check`)   |
+| `vp run test`    | Run the Playwright end-to-end tests         |
+| `vp run lint`    | Check formatting, lint and types with Vite+ |
+| `vp run format`  | Apply Oxfmt formatting, including `.astro`  |
+
+Formatting uses Oxfmt defaults with Astro support enabled. Exclusions come from `.gitignore` and
+Oxfmt's built-in defaults. Type-aware checks and Vite+ import rules stay enabled to catch errors
+and keep tooling imports consistent.
+
+Astro telemetry is disabled in CI with `ASTRO_TELEMETRY_DISABLED=1`. Locally, set the same
+environment variable or run `vp exec astro telemetry disable` once per machine. The installed Vite+ JavaScript and documentation expose no additional telemetry control.
+
+Repository agent settings disable Codex analytics and OpenTelemetry export, plus Claude Code usage
+metrics, error reporting, and OpenTelemetry export. Restart agents after changing these settings.
+User or managed settings can affect the final configuration. Lighthouse error reporting is also disabled.
+Cloudflare visitor analytics remains enabled.
 
 Useful built-ins:
 
