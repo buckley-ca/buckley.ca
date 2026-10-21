@@ -28,7 +28,7 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Lint (Oxfmt + Prettier for .astro)
+      - name: Format, lint and type check
         run: pnpm run lint
 
       - name: Type check

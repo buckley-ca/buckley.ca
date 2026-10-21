@@ -8,6 +8,11 @@ merge to `master`; versions mark notable milestones and are tagged `vX.Y.Z`.
 
 ## [Unreleased]
 
+### Changed
+
+- Use native Oxfmt Astro formatting with the Rust compiler and remove direct Prettier tooling
+- Run Vite+ formatting, linting and type checking in CI
+
 ### Fixed
 
 - `.gitattributes` forces LF line endings so `vp check` passes on Windows checkouts
