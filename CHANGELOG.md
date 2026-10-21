@@ -10,7 +10,8 @@ merge to `master`; versions mark notable milestones and are tagged `vX.Y.Z`.
 
 ### Changed
 
-- Disable development-tool telemetry in Astro scripts, CI, and repository AI-agent settings
+- Disable development-tool telemetry in CI and repository AI-agent settings
+- Align the `vite` core alias with Vite+ 1.3.0
 - Use native Oxfmt Astro formatting with the Rust compiler and remove direct Prettier tooling
 - Run Vite+ formatting, linting and type checking in CI
 
