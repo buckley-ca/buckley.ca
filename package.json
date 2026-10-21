@@ -4,10 +4,10 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "astro dev",
-    "build": "astro build && node scripts/flatten-sitemap.mjs",
-    "preview": "astro preview",
-    "check": "astro check",
+    "dev": "cross-env ASTRO_TELEMETRY_DISABLED=1 astro dev",
+    "build": "cross-env ASTRO_TELEMETRY_DISABLED=1 astro build && node scripts/flatten-sitemap.mjs",
+    "preview": "cross-env ASTRO_TELEMETRY_DISABLED=1 astro preview",
+    "check": "cross-env ASTRO_TELEMETRY_DISABLED=1 astro check",
     "test": "playwright test",
     "lint": "vp check",
     "format": "vp fmt .",
@@ -19,6 +19,7 @@
     "@astrojs/sitemap": "^3.7.4",
     "@playwright/test": "^1.64.1",
     "astro": "7.4.1",
+    "cross-env": "^10.1.0",
     "typescript": "^6.0.3",
     "vite-plus": "1.3.0"
   },

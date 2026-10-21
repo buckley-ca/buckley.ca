@@ -5,6 +5,11 @@ on:
     branches: [master]
   pull_request:
 
+env:
+  ASTRO_TELEMETRY_DISABLED: "1"
+  DO_NOT_TRACK: "1"
+  GH_TELEMETRY: "false"
+
 permissions:
   contents: read
 

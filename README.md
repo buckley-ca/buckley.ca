@@ -39,6 +39,16 @@ Formatting uses Oxfmt defaults with Astro support enabled. Exclusions come from 
 Oxfmt's built-in defaults. Type-aware checks and Vite+ import rules stay enabled to catch errors
 and keep tooling imports consistent.
 
+Astro telemetry is disabled in every Astro package script and in CI with
+`ASTRO_TELEMETRY_DISABLED=1`. Use these scripts so the opt-out is set before Astro starts.
+For direct Astro commands, set the same environment variable or run `vp exec astro telemetry disable`
+once per machine. The installed Vite+ JavaScript and documentation expose no additional telemetry control.
+
+Repository agent settings disable Codex analytics and OpenTelemetry export, plus Claude Code usage
+metrics, error reporting, and OpenTelemetry export. Restart agents after changing these settings.
+User or managed settings can affect the final configuration. Lighthouse error reporting is also disabled.
+Cloudflare visitor analytics remains enabled.
+
 Useful built-ins:
 
 | Command            | Description                                                                        |
