@@ -4,7 +4,7 @@ All notable changes to this project are documented here.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project
 adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html). The site deploys on every
-merge to `master`; versions mark notable milestones and are tagged `vX.Y.Z`.
+merge to `main`; versions mark notable milestones and are tagged `vX.Y.Z`.
 
 ## [Unreleased]
 
@@ -14,6 +14,7 @@ merge to `master`; versions mark notable milestones and are tagged `vX.Y.Z`.
 - Align the `vite` core alias with Vite+ 1.3.0
 - Use native Oxfmt Astro formatting with the Rust compiler and remove direct Prettier tooling
 - Run Vite+ formatting, linting and type checking in CI
+- Default branch renamed to `main`; CI runs on pushes to `main`
 
 ### Fixed
 
