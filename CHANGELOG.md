@@ -8,6 +8,8 @@ merge to `main`; versions mark notable milestones and are tagged `vX.Y.Z`.
 
 ## [Unreleased]
 
+## [1.2.0] - 2026-10-23
+
 ### Changed
 
 - Disable development-tool telemetry in CI and repository AI-agent settings
@@ -21,6 +23,7 @@ merge to `main`; versions mark notable milestones and are tagged `vX.Y.Z`.
 - Shorter, plainer comments in `public/_headers` and `src/lib/background.js`
 - CI no longer builds the site twice (Playwright only previews in CI)
 - All GitHub Actions pinned to commit SHAs (Dependabot keeps them current)
+- Dependencies: Astro 7.4.2, `@astrojs/check` 0.9.12, Vite+ 1.4.0, pnpm 12.15.0, Node 24.22.1
 
 ### Removed
 
@@ -118,6 +121,7 @@ Fixes from the [2026-03-02 code review](docs/code-review-2026-03-02.md).
 - **src/lib/ContactForm.svelte**: Added `required` attrs, `<label for>/<input id>` associations
 - **src/lib/Logo.svelte**: Fixed `viewbox` → `viewBox` (camelCase), added a11y svelte-ignore
 
-[Unreleased]: https://github.com/buckley-ca/buckley.ca/compare/v1.1.0...HEAD
+[Unreleased]: https://github.com/buckley-ca/buckley.ca/compare/v1.2.0...HEAD
+[1.2.0]: https://github.com/buckley-ca/buckley.ca/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/buckley-ca/buckley.ca/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/buckley-ca/buckley.ca/releases/tag/v1.0.0
