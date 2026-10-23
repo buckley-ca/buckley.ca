@@ -15,7 +15,7 @@
   },
   "devDependencies": {
     "@astrojs/check": "0.9.11",
-    "@astrojs/compiler-rs": "0.5.1",
+    "@astrojs/compiler-rs": "0.5.2",
     "@astrojs/sitemap": "^3.7.4",
     "@playwright/test": "^1.64.1",
     "astro": "7.4.1",
