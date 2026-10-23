@@ -23,6 +23,7 @@ merge to `main`; versions mark notable milestones and are tagged `vX.Y.Z`.
 - Shorter, plainer comments in `public/_headers` and `src/lib/background.js`
 - CI no longer builds the site twice (Playwright only previews in CI)
 - All GitHub Actions pinned to commit SHAs (Dependabot keeps them current)
+- Dependencies: Astro 7.4.2, `@astrojs/check` 0.9.12, Vite+ 1.4.0, pnpm 12.15.0, Node 24.22.1
 
 ### Removed
 
