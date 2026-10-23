@@ -20,6 +20,7 @@ merge to `main`; versions mark notable milestones and are tagged `vX.Y.Z`.
 - Playwright suite trimmed from 43 to 20 tests; adds a 404-page check
 - Shorter, plainer comments in `public/_headers` and `src/lib/background.js`
 - CI no longer builds the site twice (Playwright only previews in CI)
+- All GitHub Actions pinned to commit SHAs (Dependabot keeps them current)
 
 ### Removed
 
