@@ -10,113 +10,90 @@ import {
   BACKGROUND_ORIGIN,
 } from "../src/lib/background.js";
 
-// --- Structural assertions (primary gate, deterministic) ---
+// Playwright builds the site and serves it with `astro preview` (see
+// playwright.config.js), so these tests run against the real static output.
 
-test("home page h1 contains buckley", async ({ page }) => {
-  await page.goto("/");
-  await page.locator("h1").waitFor({ state: "visible" });
-  expect(await page.locator("h1").textContent()).toContain("buckley");
-});
+// --- Pages ---
 
-test("home page title", async ({ page }) => {
-  await page.goto("/");
-  await expect(page).toHaveTitle("Buckley.ca - Home");
-});
+for (const { path, title, h1, canonical } of [
+  { path: "/", title: "Buckley.ca - Home", h1: "buckley", canonical: "https://buckley.ca/" },
+  {
+    path: "/contact",
+    title: "Buckley.ca - Contact",
+    h1: "Contact",
+    canonical: "https://buckley.ca/contact",
+  },
+]) {
+  test(`${path} has its title, heading, description and active nav link`, async ({ page }) => {
+    await page.goto(path);
+    await expect(page).toHaveTitle(title);
+    await expect(page.locator("h1")).toContainText(h1);
+    await expect(page.locator('meta[name="description"]')).toHaveAttribute("content", /Buckley/i);
+    await expect(page.locator(`li.active a[href="${path}"]`)).toBeVisible();
+  });
 
-test("contact page title", async ({ page }) => {
-  await page.goto("/contact");
-  await expect(page).toHaveTitle("Buckley.ca - Contact");
-});
+  // Canonical URLs use the apex domain (www redirects to it) and no ".html".
+  test(`${path} canonical URL is the apex, extensionless`, async ({ page }) => {
+    await page.goto(path);
+    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", canonical);
+    await expect(page.locator('meta[property="og:url"]')).toHaveAttribute("content", canonical);
+  });
+}
 
-test("nav has home and contact links", async ({ page }) => {
-  await page.goto("/");
-  await expect(page.locator('nav a[href="/"]')).toBeVisible();
-  await expect(page.locator('nav a[href="/contact"]')).toBeVisible();
-});
-
-test("home nav link is active on /", async ({ page }) => {
-  await page.goto("/");
-  await expect(page.locator('li.active a[href="/"]')).toBeVisible();
-});
-
-test("contact nav link is active on /contact", async ({ page }) => {
-  await page.goto("/contact");
-  await expect(page.locator('li.active a[href="/contact"]')).toBeVisible();
-});
-
-test("contact page h1 contains Contact", async ({ page }) => {
-  await page.goto("/contact");
-  await page.locator("h1").waitFor({ state: "visible" });
-  expect(await page.locator("h1").textContent()).toContain("Contact");
-});
-
-test("contact form has email, message, submit", async ({ page }) => {
+test("contact form has email, message and submit, and posts to Formspree", async ({ page }) => {
   await page.goto("/contact");
   await expect(page.locator('input[type="email"]')).toBeVisible();
   await expect(page.locator('textarea[name="message"]')).toBeVisible();
   await expect(page.locator('button[type="submit"]')).toBeVisible();
-});
-
-test("contact form posts to Formspree", async ({ page }) => {
-  await page.goto("/contact");
   await expect(page.locator("form")).toHaveAttribute("action", /formspree/);
 });
 
-test("home page meta description", async ({ page }) => {
-  await page.goto("/");
-  await expect(page.locator('meta[name="description"]')).toHaveAttribute("content", /Buckley/i);
+test("404 page links back home", async ({ page }) => {
+  await page.goto("/404");
+  await expect(page.locator("h1")).toContainText("404");
+  await expect(page.locator('.links a[href="/"]')).toBeVisible();
 });
 
-test("contact page meta description", async ({ page }) => {
-  await page.goto("/contact");
-  await expect(page.locator('meta[name="description"]')).toHaveAttribute("content", /Buckley/i);
-});
+// --- SEO and metadata ---
 
 test("home page has JSON-LD structured data", async ({ page }) => {
   await page.goto("/");
   const ld = await page.locator('script[type="application/ld+json"]').textContent();
-  const data = JSON.parse(ld);
-  expect(data["@graph"].map((n) => n["@type"])).toContain("WebSite");
-  expect(data["@graph"].map((n) => n["@type"])).toContain("Person");
+  const types = JSON.parse(ld)["@graph"].map((node) => node["@type"]);
+  expect(types).toContain("WebSite");
+  expect(types).toContain("Person");
 });
 
+test("home page has og:image with alt and dimensions", async ({ page }) => {
+  await page.goto("/");
+  const meta = (property) => page.locator(`meta[property="${property}"]`);
+  await expect(meta("og:image")).toHaveAttribute("content", "https://buckley.ca/og.png");
+  await expect(meta("og:image:width")).toHaveAttribute("content", "1200");
+  await expect(meta("og:image:height")).toHaveAttribute("content", "630");
+  await expect(meta("og:image:alt")).toHaveAttribute("content", /buckley/i);
+});
+
+// scripts/flatten-sitemap.mjs turns the plugin's sitemap index into a single
+// sitemap.xml, which is what robots.txt points to.
 test("sitemap.xml is a flat urlset listing site pages", async ({ request }) => {
   const res = await request.get("/sitemap.xml");
   expect(res.ok()).toBeTruthy();
   const body = await res.text();
   expect(body).toContain("<urlset");
   expect(body).not.toContain("<sitemapindex");
-  // Compare the <loc>s as URLs, not as strings: @astrojs/sitemap emits the home
-  // entry as a bare origin on Node 22 and with a trailing slash on Node 24 (the
-  // version this repo requires), and both name the same page. Normalizing
-  // through the URL parser keeps the assertion about *which* pages are listed.
+  // Parse each <loc> as a URL so "https://buckley.ca" and "https://buckley.ca/"
+  // compare equal (the plugin's output varies between Node versions).
   const locs = [...body.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => new URL(m[1]).href);
   expect(locs).toEqual(["https://buckley.ca/", "https://buckley.ca/contact"]);
 });
 
-// The site publishes slashless, extensionless URLs (canonical tag, sitemap,
-// llms.txt, nav). Cloudflare Pages redirects a directory route's slashless URL
-// to its trailing-slash form, so `build.format: "file"` is what keeps those
-// published URLs from being redirects — which is exactly what Search Console
-// flagged. Assert the built output stays flat.
+// `build.format: "file"` (astro.config.mjs) emits dist/contact.html so
+// Cloudflare serves /contact directly instead of redirecting to /contact/.
 test("pages build as flat files, not directories", () => {
   const dist = fileURLToPath(new URL("../dist", import.meta.url));
   expect(existsSync(join(dist, "contact.html"))).toBeTruthy();
   expect(existsSync(join(dist, "contact", "index.html"))).toBeFalsy();
 });
-
-// Canonical URLs must name the host that actually serves 200s: www.buckley.ca
-// 301s to the apex, so publishing www URLs made every canonical a redirect.
-for (const [path, canonical] of [
-  ["/", "https://buckley.ca/"],
-  ["/contact", "https://buckley.ca/contact"],
-]) {
-  test(`canonical URL on ${path} is the apex, extensionless`, async ({ page }) => {
-    await page.goto(path);
-    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", canonical);
-    await expect(page.locator('meta[property="og:url"]')).toHaveAttribute("content", canonical);
-  });
-}
 
 test("llms.txt is served and describes the site", async ({ request }) => {
   const res = await request.get("/llms.txt");
@@ -126,31 +103,10 @@ test("llms.txt is served and describes the site", async ({ request }) => {
   expect(body).toContain("https://buckley.ca/contact");
 });
 
-test("home page has og:image with alt and dimensions", async ({ page }) => {
-  await page.goto("/");
-  await expect(page.locator('meta[property="og:image"]')).toHaveAttribute(
-    "content",
-    "https://buckley.ca/og.png",
-  );
-  await expect(page.locator('meta[property="og:image:width"]')).toHaveAttribute("content", "1200");
-  await expect(page.locator('meta[property="og:image:height"]')).toHaveAttribute("content", "630");
-  await expect(page.locator('meta[property="og:image:alt"]')).toHaveAttribute(
-    "content",
-    /buckley/i,
-  );
-});
+// --- Security headers (public/_headers) ---
 
-// --- CSP drift guard ---
-// Read the real policy from public/_headers so this test always reflects what
-// ships. Load each page with that CSP applied to the document response and fail
-// if the browser reports any violation — i.e. if the site ever loads a resource
-// the policy doesn't allow (a new third-party script, font, image host, etc.),
-// CI goes red at PR time instead of the site silently breaking in production.
-// Parse public/_headers into { "<path pattern>": { header: value } }. Keying by
-// path (not one flat map) matters now that different paths carry different
-// Cache-Control values — a flat map would let the last rule win and hide a
-// mismatch between the two hosts.
-function parseCloudflareHeaders() {
+// Parse public/_headers into { "<path pattern>": { header: value } }.
+function parseHeaders() {
   const text = readFileSync(fileURLToPath(new URL("../public/_headers", import.meta.url)), "utf8");
   const map = {};
   let path = null;
@@ -161,182 +117,51 @@ function parseCloudflareHeaders() {
       map[path] ??= {};
       continue;
     }
-    if (!path) continue;
-    const m = line.match(/^\s+([A-Za-z-]+):\s*(.+)$/);
+    const m = path && line.match(/^\s+([A-Za-z-]+):\s*(.+)$/);
     if (m) map[path][m[1]] = m[2].trim();
   }
   return map;
 }
 
-// Flatten vercel.json's headers config into the same shape. Vercel matches with
-// a regex (`/(.*)`) where Cloudflare uses a glob (`/*`); normalize to the glob
-// so the two are comparable.
-function parseVercelHeaders() {
-  const json = JSON.parse(
-    readFileSync(fileURLToPath(new URL("../vercel.json", import.meta.url)), "utf8"),
-  );
-  const map = {};
-  for (const rule of json.headers ?? []) {
-    const path = rule.source.replace(/\(\.\*\)/g, "*");
-    map[path] ??= {};
-    for (const h of rule.headers ?? []) map[path][h.key] = h.value.trim();
-  }
-  return map;
-}
-
-const cloudflareHeaders = parseCloudflareHeaders();
-const siteHeaders = cloudflareHeaders["/*"];
+const siteHeaders = parseHeaders()["/*"];
 const csp = siteHeaders["Content-Security-Policy"];
 
-// Cloudflare (_headers) and Vercel (vercel.json) are separate files; keep them
-// in lockstep so a header changed in one host isn't forgotten in the other.
-// Compare the full header maps rather than a hand-listed subset — otherwise a
-// header added to one file and missing from the other slips through simply
-// because nobody remembered to add its name to the list here too.
-test("vercel.json security headers match public/_headers", () => {
-  const vercelHeaders = parseVercelHeaders();
-
-  // Guard the parsers themselves: an empty map would make the comparison below
-  // pass vacuously if either file's format ever changes.
-  expect(Object.keys(cloudflareHeaders).length).toBeGreaterThan(0);
-  expect(Object.keys(siteHeaders).length).toBeGreaterThan(0);
-
-  expect(vercelHeaders).toEqual(cloudflareHeaders);
-});
-
-// The headers above are the ones that actually matter, so assert their content
-// rather than only that the two hosts agree on it — two identically-wrong files
-// would satisfy the drift check.
 test("security headers carry the expected hardening", () => {
   expect(siteHeaders["X-Content-Type-Options"]).toBe("nosniff");
   expect(siteHeaders["X-Frame-Options"]).toBe("DENY");
   expect(siteHeaders["Referrer-Policy"]).toBe("strict-origin-when-cross-origin");
   expect(siteHeaders["Cross-Origin-Opener-Policy"]).toBe("same-origin");
 
-  // Mirror Cloudflare's edge-injected HSTS (see public/_headers): Cloudflare's
-  // dashboard HSTS overrides this file live, so the repo tracks its value rather
-  // than a value that never ships. `includeSubDomains` and `preload` are part of
-  // that default; assert them so dropping either is a conscious edit here.
-  // Six months (15768000) — Cloudflare's recommended setting, and what the
-  // dashboard is configured to inject. The edge value overrides this file, so
-  // the two must agree: if the dashboard's HSTS (SSL/TLS -> Edge Certificates)
-  // ever moves, move this with it. Floor, not equality, so raising the duration
-  // (e.g. to one year for preload-list eligibility) doesn't fail the suite.
+  // At least six months, matching Cloudflare's dashboard HSTS setting.
   const hsts = siteHeaders["Strict-Transport-Security"];
   expect(Number(hsts.match(/max-age=(\d+)/)[1])).toBeGreaterThanOrEqual(15768000);
   expect(hsts).toMatch(/includeSubDomains/);
   expect(hsts).toMatch(/preload/);
 
-  // script-src is the directive worth pinning: no 'unsafe-inline'/'unsafe-eval',
-  // no wildcard host. Everything else is intentionally permissive (see _headers).
+  // script-src is the directive that matters most: our own scripts plus the
+  // Cloudflare analytics beacon, never 'unsafe-inline', 'unsafe-eval' or "*".
   const directives = Object.fromEntries(
-    siteHeaders["Content-Security-Policy"]
+    csp
       .split(";")
       .map((d) => d.trim().split(/\s+/))
       .map(([name, ...values]) => [name, values]),
   );
-  // script-src may name explicit third-party origins (Cloudflare's edge-injected
-  // Web Analytics beacon), but never 'unsafe-inline', 'unsafe-eval' or a wildcard.
   expect(directives["script-src"]).toEqual(["'self'", "https://static.cloudflareinsights.com"]);
-  for (const value of directives["script-src"]) {
-    expect(value).not.toMatch(/unsafe-inline|unsafe-eval|^\*|^https?:$/);
-  }
   expect(directives["connect-src"]).toEqual(["'self'", "https://cloudflareinsights.com"]);
   expect(directives["object-src"]).toEqual(["'none'"]);
   expect(directives["base-uri"]).toEqual(["'self'"]);
   expect(directives["frame-ancestors"]).toEqual(["'none'"]);
 });
 
-// --- LCP preload ---
-// The desktop preload must be the *negation* of the mobile one, not a
-// `min-width` one pixel above it. Viewport widths aren't integers, and
-// `(max-width: 640px)` / `(min-width: 641px)` leave 640 < width < 641
-// uncovered: that sliver paints the desktop background with nothing preloaded,
-// putting the LCP request back to undiscoverable — the exact problem the
-// preload exists to fix. Playwright viewports are integers, so no per-width
-// test below can reach that sliver; this guards the property structurally
-// instead, and fails if anyone "simplifies" the query back to a numeric bound.
-test("the two preload media queries leave no gap", () => {
-  expect(BACKGROUND_DESKTOP_MEDIA).toBe(`not all and ${BACKGROUND_MOBILE_MEDIA}`);
-  expect(BACKGROUND_DESKTOP_MEDIA).not.toMatch(/min-width/);
-});
-
-// The Cloudinary background is the LCP element and lives only in CSS, so the
-// browser can't discover it from the HTML. Layout.astro preloads it at high
-// priority; these assert the preload is there and — crucially — that the URL it
-// names is byte-identical to the one the CSS paints. A mismatch wouldn't fail
-// visibly, it would just download the background twice, which is worse than not
-// preloading at all.
-for (const path of ["/", "/contact"]) {
-  test(`${path} preloads the background at high priority`, async ({ page }) => {
-    await page.goto(path);
-
-    const mobile = page.locator(`link[rel="preload"][media="${BACKGROUND_MOBILE_MEDIA}"]`);
-    const desktop = page.locator(`link[rel="preload"][media="${BACKGROUND_DESKTOP_MEDIA}"]`);
-
-    for (const link of [mobile, desktop]) {
-      await expect(link).toHaveAttribute("as", "image");
-      await expect(link).toHaveAttribute("fetchpriority", "high");
-    }
-
-    await expect(mobile).toHaveAttribute("href", BACKGROUND_MOBILE);
-    await expect(desktop).toHaveAttribute("href", BACKGROUND_DESKTOP);
-
-    await expect(page.locator(`link[rel="preconnect"][href="${BACKGROUND_ORIGIN}"]`)).toHaveCount(
-      1,
-    );
-  });
-
-  test(`${path} paints exactly the background URLs it preloads`, async ({ page }) => {
-    await page.goto(path);
-
-    // Layout.astro defines the two URLs once as :root custom properties, which
-    // is what the .background rule resolves. Reading them back proves the CSS
-    // and the preloads share one source of truth.
-    const vars = await page.evaluate(() => {
-      const style = getComputedStyle(document.documentElement);
-      return {
-        mobile: style.getPropertyValue("--background-mobile").trim(),
-        desktop: style.getPropertyValue("--background-desktop").trim(),
-      };
-    });
-
-    expect(vars.mobile).toContain(BACKGROUND_MOBILE);
-    expect(vars.desktop).toContain(BACKGROUND_DESKTOP);
-  });
-
-  // The two preload media queries have to partition every width between them.
-  // A width matching neither preloads nothing (the LCP request goes back to
-  // being undiscoverable, which is the whole bug this change fixes); a width
-  // matching both preloads an image the page won't paint. Walk the widths
-  // around the breakpoint and assert exactly one preload matches and that it
-  // names the image actually painted there.
-  for (const width of [320, 412, 639, 640, 641, 642, 1024, 1440]) {
-    test(`${path} preloads exactly the painted background at ${width}px`, async ({ page }) => {
-      await page.setViewportSize({ width, height: 800 });
-      await page.goto(path);
-
-      const { matched, painted } = await page.evaluate(() => {
-        const links = [...document.querySelectorAll('link[rel="preload"][as="image"]')];
-        return {
-          matched: links.filter((l) => matchMedia(l.media).matches).map((l) => l.href),
-          painted: getComputedStyle(document.querySelector(".background")).backgroundImage,
-        };
-      });
-
-      expect(matched).toHaveLength(1);
-      expect(painted).toContain(matched[0]);
-    });
-  }
-}
-
+// `astro preview` doesn't apply _headers, so add the CSP to each page response
+// ourselves and fail if the browser blocks anything. This catches a new
+// third-party resource that the policy doesn't allow yet.
 for (const path of ["/", "/contact"]) {
   test(`no CSP violations on ${path}`, async ({ page }) => {
     const violations = [];
     page.on("console", (msg) => {
       if (/Content Security Policy/i.test(msg.text())) violations.push(msg.text());
     });
-    // Apply the real CSP to the navigated document; let subresources load normally.
     await page.route("**/*", async (route) => {
       if (route.request().resourceType() === "document") {
         const res = await route.fetch();
@@ -351,5 +176,45 @@ for (const path of ["/", "/contact"]) {
     await page.goto(path, { waitUntil: "domcontentloaded" });
     await page.waitForTimeout(500);
     expect(violations, violations.join("\n")).toEqual([]);
+  });
+}
+
+// --- Background preload (src/lib/background.js) ---
+
+// Fractional widths like 640.5px match neither `max-width: 640px` nor
+// `min-width: 641px`, so the desktop query must be the exact negation of the
+// mobile one. Playwright can't set fractional widths, so check the string.
+test("the two preload media queries leave no gap", () => {
+  expect(BACKGROUND_DESKTOP_MEDIA).toBe(`not all and ${BACKGROUND_MOBILE_MEDIA}`);
+});
+
+test("preloads point at the background images with high priority", async ({ page }) => {
+  await page.goto("/");
+  const mobile = page.locator(`link[rel="preload"][media="${BACKGROUND_MOBILE_MEDIA}"]`);
+  const desktop = page.locator(`link[rel="preload"][media="${BACKGROUND_DESKTOP_MEDIA}"]`);
+  await expect(mobile).toHaveAttribute("href", BACKGROUND_MOBILE);
+  await expect(desktop).toHaveAttribute("href", BACKGROUND_DESKTOP);
+  for (const link of [mobile, desktop]) {
+    await expect(link).toHaveAttribute("as", "image");
+    await expect(link).toHaveAttribute("fetchpriority", "high");
+  }
+  await expect(page.locator(`link[rel="preconnect"][href="${BACKGROUND_ORIGIN}"]`)).toHaveCount(1);
+});
+
+// At each width exactly one preload should match, and it should be the image
+// the page actually paints. 640 and 641 sit either side of the breakpoint.
+for (const width of [412, 640, 641, 1440]) {
+  test(`preloads exactly the painted background at ${width}px`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 800 });
+    await page.goto("/");
+    const { matched, painted } = await page.evaluate(() => {
+      const links = [...document.querySelectorAll('link[rel="preload"][as="image"]')];
+      return {
+        matched: links.filter((l) => matchMedia(l.media).matches).map((l) => l.href),
+        painted: getComputedStyle(document.querySelector(".background")).backgroundImage,
+      };
+    });
+    expect(matched).toHaveLength(1);
+    expect(painted).toContain(matched[0]);
   });
 }

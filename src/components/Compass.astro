@@ -1,58 +1,35 @@
----
-interface Props {
-  /** CSS length for the rendered width/height. Defaults to 10rem. */
-  size?: string;
-  /** Accessible label. Set to "" together with `decorative` to hide from a11y tree. */
-  label?: string;
-  /** Render as decorative (aria-hidden) instead of an img with a label. */
-  decorative?: boolean;
-  /** Extra class(es) merged onto the root <svg>. */
-  class?: string;
-}
-
-const {
-  size = "10rem",
-  label = "A compass, to help you find your way",
-  decorative = false,
-  class: className,
-} = Astro.props;
-
-// Unique id prefix so several compasses on one page don't share gradient ids.
-const uid = "compass-" + Math.random().toString(36).slice(2, 8);
----
-
+<!-- Decorative compass for the 404 page. The gradient and star-point ids below
+     are page-global, so render at most one compass per page. -->
 <svg
-  class:list={["compass", className]}
-  style={`width:${size};height:${size};`}
+  class="compass"
   viewBox="0 0 240 240"
   xmlns="http://www.w3.org/2000/svg"
-  role={decorative ? undefined : "img"}
-  aria-hidden={decorative ? "true" : undefined}
-  aria-label={decorative ? undefined : label}
+  role="img"
+  aria-label="A compass, to help you find your way"
 >
   <defs>
-    <radialGradient id={`${uid}-bezel`} cx="42%" cy="38%" r="68%">
+    <radialGradient id="compass-bezel" cx="42%" cy="38%" r="68%">
       <stop offset="0%" stop-color="#ececec"></stop>
       <stop offset="55%" stop-color="#a9a9a9"></stop>
       <stop offset="100%" stop-color="#555555"></stop>
     </radialGradient>
-    <radialGradient id={`${uid}-hub`} cx="40%" cy="36%" r="70%">
+    <radialGradient id="compass-hub" cx="40%" cy="36%" r="70%">
       <stop offset="0%" stop-color="#f5f5f5"></stop>
       <stop offset="100%" stop-color="#777777"></stop>
     </radialGradient>
-    <radialGradient id={`${uid}-face`} cx="44%" cy="40%" r="72%">
+    <radialGradient id="compass-face" cx="44%" cy="40%" r="72%">
       <stop offset="0%" stop-color="#fbfbfb"></stop>
       <stop offset="70%" stop-color="#eeeeee"></stop>
       <stop offset="100%" stop-color="#dadada"></stop>
     </radialGradient>
 
     <!-- One major (cardinal) star point, pointing north -->
-    <g id={`${uid}-major`}>
+    <g id="compass-major">
       <polygon class="rose-dk" points="120,54 112,112 120,120"></polygon>
       <polygon class="rose-lt" points="120,54 128,112 120,120"></polygon>
     </g>
     <!-- One minor (intercardinal) star point, pointing north -->
-    <g id={`${uid}-minor`}>
+    <g id="compass-minor">
       <polygon class="rose-dk" points="120,70 114,114 120,120"></polygon>
       <polygon class="rose-lt" points="120,70 126,114 120,120"></polygon>
     </g>
@@ -63,7 +40,7 @@ const uid = "compass-" + Math.random().toString(36).slice(2, 8);
     cx="120"
     cy="120"
     r="110"
-    fill={`url(#${uid}-bezel)`}
+    fill="url(#compass-bezel)"
     stroke="#333"
     stroke-width="0.5"
   ></circle>
@@ -83,7 +60,7 @@ const uid = "compass-" + Math.random().toString(36).slice(2, 8);
     cx="120"
     cy="120"
     r="90"
-    fill={`url(#${uid}-face)`}
+    fill="url(#compass-face)"
     stroke="#666"
     stroke-width="1.5"
   ></circle>
@@ -104,14 +81,14 @@ const uid = "compass-" + Math.random().toString(36).slice(2, 8);
 
   <!-- Compass rose -->
   <g class="rose">
-    <use href={`#${uid}-minor`} transform="rotate(45 120 120)"></use>
-    <use href={`#${uid}-minor`} transform="rotate(135 120 120)"></use>
-    <use href={`#${uid}-minor`} transform="rotate(225 120 120)"></use>
-    <use href={`#${uid}-minor`} transform="rotate(315 120 120)"></use>
-    <use href={`#${uid}-major`}></use>
-    <use href={`#${uid}-major`} transform="rotate(90 120 120)"></use>
-    <use href={`#${uid}-major`} transform="rotate(180 120 120)"></use>
-    <use href={`#${uid}-major`} transform="rotate(270 120 120)"></use>
+    <use href="#compass-minor" transform="rotate(45 120 120)"></use>
+    <use href="#compass-minor" transform="rotate(135 120 120)"></use>
+    <use href="#compass-minor" transform="rotate(225 120 120)"></use>
+    <use href="#compass-minor" transform="rotate(315 120 120)"></use>
+    <use href="#compass-major"></use>
+    <use href="#compass-major" transform="rotate(90 120 120)"></use>
+    <use href="#compass-major" transform="rotate(180 120 120)"></use>
+    <use href="#compass-major" transform="rotate(270 120 120)"></use>
   </g>
 
   <!-- Cardinal letters -->
@@ -139,7 +116,7 @@ const uid = "compass-" + Math.random().toString(36).slice(2, 8);
     cx="120"
     cy="120"
     r="10"
-    fill={`url(#${uid}-hub)`}
+    fill="url(#compass-hub)"
     stroke="#333"
     stroke-width="1.5"
   ></circle>
@@ -147,6 +124,11 @@ const uid = "compass-" + Math.random().toString(36).slice(2, 8);
 </svg>
 
 <style>
+  .compass {
+    width: 10rem;
+    height: 10rem;
+  }
+
   .rose-dk {
     fill: #333;
   }
