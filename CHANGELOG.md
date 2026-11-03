@@ -8,6 +8,10 @@ merge to `main`; versions mark notable milestones and are tagged `vX.Y.Z`.
 
 ## [Unreleased]
 
+### Changed
+
+- Require Node 26.13.0 or newer and pin development and CI to 26.13.0
+
 ## [1.2.0] - 2026-10-23
 
 ### Changed
