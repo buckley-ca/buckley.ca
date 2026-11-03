@@ -7,12 +7,14 @@ allowBuilds:
 
 # Vite+ ships its own Vite core; alias it so Astro and vite-plus share one copy.
 overrides:
-  vite: npm:@voidzero-dev/vite-plus-core@1.4.0
+  vite@*: "catalog:"
 
 # vitest declares a vite@^6–8 peer; the vite-plus core alias above reports 1.4.0.
 peerDependencyRules:
   allowedVersions:
-    vite: "1.4.0"
+    vite: "*"
+  allowAny:
+    - vite
 
 minimumReleaseAgeExclude:
   - "@voidzero-dev/vite-plus-core@1.4.0"
@@ -26,3 +28,6 @@ minimumReleaseAgeExclude:
   - "@voidzero-dev/vite-plus-win32-x64-msvc@1.4.0"
   - vite-plus@1.4.0
   - astro@7.4.5
+catalog:
+  vite: npm:@voidzero-dev/vite-plus-core@1.4.0
+  vite-plus: 1.4.0
