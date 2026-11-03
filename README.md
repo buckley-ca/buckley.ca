@@ -16,7 +16,7 @@ vp run dev
 vp run dev --open
 ```
 
-Requires **Node 24+** (pinned in `.node-version`). The package manager is **pnpm** (pinned via
+Requires **Node 26.13.0+** (pinned in `.node-version`). The package manager is **pnpm** (pinned via
 `packageManager`; `corepack enable` provides it). `vp install` delegates to pnpm, and plain
 `pnpm install` / `pnpm run <script>` work too — CI uses pnpm directly.
 
