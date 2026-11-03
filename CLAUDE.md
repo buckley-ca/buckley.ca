@@ -6,7 +6,7 @@ adapter). See [README.md](README.md) for the full script list.
 ## Stack & commands
 
 - Package manager: **pnpm** (pinned in `packageManager`; settings in `pnpm-workspace.yaml`).
-  Node **≥ 24** (see `.node-version`).
+  Node **≥ 26.13.0** (see `.node-version`).
 - Toolchain: **Vite+** (`vp`). `vp <name>` is a Vite+ built-in; `vp run <name>` (alias `vpr`) runs the
   `package.json` script of that name. `pnpm run <name>` also works and is what CI uses.
 - `vp run dev` · `vp run build` (→ `dist/`) · `vp run preview`.
