@@ -27,7 +27,12 @@ minimumReleaseAgeExclude:
   - "@voidzero-dev/vite-plus-win32-arm64-msvc@1.4.0"
   - "@voidzero-dev/vite-plus-win32-x64-msvc@1.4.0"
   - vite-plus@1.4.0
-  - astro@7.4.5
+  - astro@7.4.5 || 7.4.7
+  - "@astrojs/internal-helpers@0.13.1"
+  - "@astrojs/markdown-satteri@0.4.7"
+  - "@playwright/test@1.65.0"
+  - playwright-core@1.65.0
+  - playwright@1.65.0
 catalog:
   vite: npm:@voidzero-dev/vite-plus-core@1.4.0
   vite-plus: 1.4.0
