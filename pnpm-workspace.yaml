@@ -33,6 +33,18 @@ minimumReleaseAgeExclude:
   - "@playwright/test@1.65.0"
   - playwright-core@1.65.0
   - playwright@1.65.0
+  - "@astrojs/compiler-binding-android-arm64@0.5.3"
+  - "@astrojs/compiler-binding-darwin-arm64@0.5.3"
+  - "@astrojs/compiler-binding-darwin-x64@0.5.3"
+  - "@astrojs/compiler-binding-linux-arm64-gnu@0.5.3"
+  - "@astrojs/compiler-binding-linux-arm64-musl@0.5.3"
+  - "@astrojs/compiler-binding-linux-x64-gnu@0.5.3"
+  - "@astrojs/compiler-binding-linux-x64-musl@0.5.3"
+  - "@astrojs/compiler-binding-wasm32-wasi@0.5.3"
+  - "@astrojs/compiler-binding-win32-arm64-msvc@0.5.3"
+  - "@astrojs/compiler-binding-win32-x64-msvc@0.5.3"
+  - "@astrojs/compiler-binding@0.5.3"
+  - "@astrojs/compiler-rs@0.5.3"
 catalog:
   vite: npm:@voidzero-dev/vite-plus-core@1.4.0
   vite-plus: 1.4.0
