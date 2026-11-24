@@ -16,14 +16,14 @@
   "devDependencies": {
     "@astrojs/check": "0.9.12",
     "@astrojs/compiler-rs": "0.5.3",
-    "@astrojs/sitemap": "3.7.5",
+    "@astrojs/sitemap": "3.7.6",
     "@playwright/test": "^1.65.1",
-    "astro": "7.4.12",
+    "astro": "7.4.13",
     "typescript": "^6.0.3",
     "vite-plus": "catalog:"
   },
   "engines": {
     "node": ">=26.13.0"
   },
-  "packageManager": "pnpm@12.21.0"
+  "packageManager": "pnpm@12.23.0"
 }
